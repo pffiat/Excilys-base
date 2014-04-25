@@ -54,17 +54,23 @@ public class indexServlet extends HttpServlet {
 		if( currentPage != null) {
 			currentPageInt = Integer.parseInt(currentPage);
 		}
-		String criteria = (currentPageInt*nbDisplayed - nbDisplayed) + "," + nbDisplayed;
-		nbOfBouton = (nbOfPc % nbDisplayed) + 1;
+		String order = request.getParameter("order");
+		System.out.println(order);
+		String orderBy = "";
+		if(order!=null && !"".equals(order)) orderBy = " ORDER BY " + request.getParameter("column") + " " + order;
+		String searchComputer = " WHERE computer.name='" + request.getParameter("search") + "' OR company.name='" + request.getParameter("search") + "'";
+		
+		String criteria =  ((request.getParameter("search")!=null && !("".equals(request.getParameter("search"))) ) ? searchComputer : "")
+				+ orderBy
+				+ " LIMIT " + (currentPageInt*nbDisplayed - nbDisplayed) + "," + nbDisplayed ;
+		
+		nbOfBouton = (int)(nbOfPc / nbDisplayed) + 1;
 		List<ComputerDTO> liste = ComputerMapper.toDTOList(cs.getCriteria(criteria));
 		request.setAttribute("computers", liste);
 		request.setAttribute("nbOfPc", nbOfPc);
 		request.setAttribute("nbOfBouton", nbOfBouton);
 		request.setAttribute("nbDisplayed", nbDisplayed);
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request , response);
-		System.out.println("criteria: " + criteria);
-		System.out.println("lignes: " + nbDisplayed);
-		System.out.println("page: " + currentPageInt);
 		//request.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request , response);
 	}
 

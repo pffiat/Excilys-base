@@ -25,7 +25,7 @@ public class ComputerMapper {
 	public final static ComputerDTO toDTO( Computer cpn) {
 		return new ComputerDTO(cpn.getId(), cpn.getName(), calendarToString(cpn.getIntroduced()), calendarToString(cpn.getDiscontinued()), cpn.getCompany().getId(), cpn.getCompany().getName());
 	}
-	
+
 	public final static List<ComputerDTO> toDTOList(List<Computer> cl){
 		List<ComputerDTO> dto = new ArrayList<ComputerDTO>();
 		for(Iterator<Computer> i = cl.iterator(); i.hasNext(); ) {
@@ -33,7 +33,7 @@ public class ComputerMapper {
 		}
 		return dto;
 	}
-	
+
 	public final static List<Computer> fromDTOList(List<ComputerDTO> dto){
 		List<Computer> cl = new ArrayList<Computer>();
 		for(Iterator<ComputerDTO> i = dto.iterator(); i.hasNext(); ) {
@@ -85,7 +85,6 @@ public class ComputerMapper {
 		}
 		ret.append(date);
 
-		System.out.println("calendarToString: " + ret.toString());
 		return ret.toString();
 	}
 

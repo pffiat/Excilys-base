@@ -66,7 +66,7 @@ public class ComputerDAO {
 
 
 	public List<Computer> getCriteria(String criteria) {
-		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id LIMIT " + criteria;
+		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id " + criteria;
 		System.out.println(query);
 		return select(query);
 
