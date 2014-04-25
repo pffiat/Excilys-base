@@ -1,9 +1,7 @@
 package com.excilys.formation.java.projet.DTO;
 
+public class ComputerDTO {
 
-public class ComputerDTO{
-
-	private static final long serialVersionUID = 1L;
 	private int id = 0;
 	private String name;
 	private String introduced;
@@ -73,10 +71,6 @@ public class ComputerDTO{
 		this.company = company;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public String toString() {
 		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced="
@@ -93,9 +87,7 @@ public class ComputerDTO{
 		this.setCompany(b.getCompany());
 	}
 
-
-	public static class Builder{
-
+	public static class Builder {
 
 		private int id;
 		private String name;
@@ -104,27 +96,32 @@ public class ComputerDTO{
 		private int company_id;
 		private String company;
 
-		public Builder id(int id){
+		public Builder id(int id) {
 			this.setId(id);
 			return this;
 		}
-		public Builder name(String name){
+
+		public Builder name(String name) {
 			this.setName(name);
 			return this;
 		}
-		public Builder introduced(String introcued){
+
+		public Builder introduced(String introcued) {
 			this.setIntroduced(introcued);
 			return this;
 		}
-		public Builder discontinued(String discontinued){
+
+		public Builder discontinued(String discontinued) {
 			this.setDiscontinued(discontinued);
 			return this;
 		}
-		public Builder company_id(int company_id){
+
+		public Builder company_id(int company_id) {
 			this.setCompany_id(company_id);
 			return this;
 		}
-		public Builder company(String company){
+
+		public Builder company(String company) {
 			this.setCompany(company);
 			return this;
 		}
@@ -137,50 +134,59 @@ public class ComputerDTO{
 			company_id = 0;
 			company = "unknonw";
 		}
+
 		public int getId() {
 			return id;
 		}
+
 		public String getName() {
 			return name;
 		}
+
 		public String getIntroduced() {
 			return introduced;
 		}
+
 		public String getDiscontinued() {
 			return discontinued;
 		}
+
 		public int getCompany_id() {
 			return company_id;
 		}
+
 		public String getCompany() {
 			return company;
 		}
+
 		public void setId(int id) {
 			this.id = id;
 		}
+
 		public void setName(String name) {
 			this.name = name;
 		}
+
 		public void setIntroduced(String introduced) {
 			this.introduced = introduced;
 		}
+
 		public void setDiscontinued(String discontinued) {
 			this.discontinued = discontinued;
 		}
+
 		public void setCompany_id(int company_id) {
 			this.company_id = company_id;
 		}
+
 		public void setCompany(String company) {
 			this.company = company;
 		}
-		public ComputerDTO build(){
+
+		public ComputerDTO build() {
 			return new ComputerDTO(this);
 		}
 
 	}
 
-
 }
-
-
-
