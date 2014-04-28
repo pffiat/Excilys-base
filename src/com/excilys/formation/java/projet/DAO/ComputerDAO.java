@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.*;
+import java.sql.Connection;
 
 public class ComputerDAO {
 
@@ -22,7 +23,7 @@ public class ComputerDAO {
 
 	private ComputerDAO() {
 		if(cm == null) {
-			cm = new ConnectionManager();
+			ConnectionManager.getInstance();
 		}		
 	}
 
@@ -75,10 +76,10 @@ public class ComputerDAO {
 
 	private void request(String query) {
 
-		cm.connection();
+		Connection conn = ConnectionManager.getConnection();
 		Statement stmt = null;
 		try {
-			stmt = cm.conn.createStatement();
+			stmt = conn.createStatement();
 			try {
 				stmt.executeUpdate(query);
 			} catch (SQLException e) {
@@ -92,7 +93,6 @@ public class ComputerDAO {
 			try {
 				stmt.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -102,11 +102,11 @@ public class ComputerDAO {
 	public List<Computer> select(String query) {
 
 		List<Computer> liste  = new ArrayList<Computer>();	
-		cm.connection();
 		Statement stmt = null;
 		ResultSet results = null;
+		Connection conn = ConnectionManager.getConnection();
 		try {
-			stmt = cm.conn.createStatement();
+			stmt = conn.createStatement();
 			try {
 				results = stmt.executeQuery(query);		
 				try {
@@ -135,7 +135,9 @@ public class ComputerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-			cm.close(stmt, results);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeResultSet(results);
 		}
 		return liste;
 	}

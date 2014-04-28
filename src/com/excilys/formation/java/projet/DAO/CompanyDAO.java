@@ -1,6 +1,7 @@
 package com.excilys.formation.java.projet.DAO;
 
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,9 +22,7 @@ public class CompanyDAO {
 	synchronized public static CompanyDAO getInstance() {
 		if(compDAO == null) {
 			compDAO = new CompanyDAO();
-		}
-		if(cm == null) {
-			cm = new ConnectionManager();
+			ConnectionManager.getInstance();
 		}
 		return compDAO;
 	}	
@@ -64,11 +63,11 @@ public class CompanyDAO {
 	
 	private void request(String query) {
 		
-		cm.connection();
 		Statement stmt = null;
 		ResultSet results = null;
+		Connection conn = ConnectionManager.getConnection();
 		try {
-			stmt = cm.conn.createStatement();
+			stmt = conn.createStatement();
 			try {
 				results = stmt.executeQuery(query);
 			} catch (SQLException e) {
@@ -77,7 +76,9 @@ public class CompanyDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-			cm.close(stmt, results);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeResultSet(results);			
 		}
 		
 	}
@@ -85,11 +86,11 @@ public class CompanyDAO {
 	public List<Company> select(String query) {
 
 		List<Company> liste  = new ArrayList<Company>();	
-		cm.connection();
 		Statement stmt = null;
 		ResultSet results = null;
+		Connection conn = ConnectionManager.getConnection();
 		try {
-			stmt = cm.conn.createStatement();
+			stmt = conn.createStatement();
 			try {
 
 				System.out.println("results:");
@@ -110,7 +111,9 @@ public class CompanyDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-			cm.close(stmt, results);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeResultSet(results);	
 		}
 		return liste;
 	}

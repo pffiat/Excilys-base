@@ -1,70 +1,64 @@
 package com.excilys.formation.java.projet.DAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public class ConnectionManager {
+public enum ConnectionManager {
+	INSTANCE;
 
-	public Connection conn = null;
+	private ConnectionManager() {
+	}
+
+	public static ConnectionManager getInstance() {
+		return INSTANCE;
+	}
+
 	private static BoneCP connectionPool = null;
-	public ConnectionManager() {
+
+	// public static void getInstance() {
+	// System.out.println(cm);
+	// if(cm == null) {
+	// cm = new ConnectionManager();
+	// configureConnPool();
+	// }
+	// System.out.println("ConnectionManager getInstance");
+	// }
+
+
+	private static void configureConnPool() {
+		System.out.println("entrée config");
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance(); //AJOUTER LE PAQUET
-		} catch (InstantiationException | IllegalAccessException
-				| ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void connection(/* do to */) {
-
-		String url = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-		try {
-			conn = DriverManager.getConnection(url, "root", "root");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	public void close(Statement stmt, ResultSet results ) {			
-		try{
-			if(stmt != null)
-				stmt.close();
-			if(conn != null)
-				conn.close();
-			if(results != null)
-				results.close();
-		} catch (SQLException e) {
-			e.printStackTrace();	
-		}
-
-	} 
-	public static void configureConnPool() {
-
-		try {
-			Class.forName("com.mysql.jdbc.Driver"); //also you need the MySQL driver
+			Class.forName("com.mysql.jdbc.Driver"); // also you need the MySQL
+													// driver
 			BoneCPConfig config = new BoneCPConfig();
-			config.setJdbcUrl("jdbc:mysql://localhost:3306/testproject");
+			config.setJdbcUrl("jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull");
 			config.setUsername("root");
-			config.setPassword("admin");
-			config.setMinConnectionsPerPartition(5); //if you say 5 here, there will be 10 connection available   config.setMaxConnectionsPerPartition(10);
-			config.setPartitionCount(2); //2*5 = 10 connection will be available
-			//config.setLazyInit(true); //depends on the application usage you should chose lazy or not
-			//setting Lazy true means BoneCP won't open any connections before you request a one from it.
+			config.setPassword("root");
+			config.setMinConnectionsPerPartition(5); // if you say 5 here, there
+														// will be 10 connection
+														// available
+														// config.setMaxConnectionsPerPartition(10);
+			config.setPartitionCount(2); // 2*5 = 10 connection will be
+											// available
+			// config.setLazyInit(true); //depends on the application usage you
+			// should chose lazy or not
+			// setting Lazy true means BoneCP won't open any connections before
+			// you request a one from it.
 			connectionPool = new BoneCP(config); // setup the connection pool
-			System.out.println("contextInitialized.....Connection Pooling is configured");
-			System.out.println("Total connections ==> " + connectionPool.getTotalCreatedConnections());
+			System.out
+					.println("contextInitialized.....Connection Pooling is configured");
+			System.out.println("Total connections ==> "
+					+ connectionPool.getTotalCreatedConnections());
 			ConnectionManager.setConnectionPool(connectionPool);
 
 		} catch (Exception e) {
-			e.printStackTrace(); //you should use exception wrapping on real-production code
+			e.printStackTrace(); // you should use exception wrapping on
+									// real-production code
 		}
 
 	}
@@ -75,9 +69,12 @@ public class ConnectionManager {
 			BoneCP connectionPool = ConnectionManager.getConnectionPool();
 			System.out.println("contextDestroyed....");
 			if (connectionPool != null) {
-				connectionPool.shutdown(); //this method must be called only once when the application stops.
-				//you don't need to call it every time when you get a connection from the Connection Pool
-				System.out.println("contextDestroyed.....Connection Pooling shut downed!");
+				connectionPool.shutdown(); // this method must be called only
+											// once when the application stops.
+				// you don't need to call it every time when you get a
+				// connection from the Connection Pool
+				System.out
+						.println("contextDestroyed.....Connection Pooling shut downed!");
 			}
 
 		} catch (Exception e) {
@@ -90,8 +87,9 @@ public class ConnectionManager {
 		Connection conn = null;
 		try {
 			conn = getConnectionPool().getConnection();
-			//will get a thread-safe connection from the BoneCP connection pool.
-			//synchronization of the method will be done inside BoneCP source
+			// will get a thread-safe connection from the BoneCP connection
+			// pool.
+			// synchronization of the method will be done inside BoneCP source
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,8 +121,7 @@ public class ConnectionManager {
 	public static void closeConnection(Connection conn) {
 		try {
 			if (conn != null)
-				conn.close(); //release the connection - the name is tricky but connection is not closed it is released
-			//and it will stay in pool
+				conn.close(); // release the connection
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -132,6 +129,10 @@ public class ConnectionManager {
 	}
 
 	public static BoneCP getConnectionPool() {
+		if( connectionPool ==null){
+			System.out.println("dans le if");
+			configureConnPool();
+		}
 		return connectionPool;
 	}
 
