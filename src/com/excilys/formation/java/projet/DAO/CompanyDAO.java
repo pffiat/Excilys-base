@@ -10,62 +10,60 @@ import java.util.List;
 
 import com.excilys.formation.java.projet.modele.*;
 
-public class CompanyDAO {
+public enum CompanyDAO {
 
-	private static ConnectionManager cm = null;
+	INSTANCE;
 	
-	/* singleton pattern*/
-	private static CompanyDAO compDAO = null;
 	private CompanyDAO() {	
 		
 	}
-	synchronized public static CompanyDAO getInstance() {
-		if(compDAO == null) {
-			compDAO = new CompanyDAO();
+	
+	public static CompanyDAO getInstance() {
+		if(cm == null) {
 			ConnectionManager.getInstance();
 		}
-		return compDAO;
+		return INSTANCE;
 	}	
+
+	private static ConnectionManager cm = null;
 	
-	
-	public void insert(Company comp) { 
+	public void insert(Company comp, Connection conn) { 
 		String query = "INSERT INTO company (id , name) "
 				+ "VALUES ('" + comp.getId() + "', '" + comp.getName() + "') ";
 		
-		request(query);
+		request(query, conn);
 	}
 	
-	public void delete(Company comp) {
+	public void delete(Company comp, Connection conn) {
 		String query = "DELETE FROM company WHERE id=" + comp.getId();
 
-		request(query);
+		request(query, conn);
 	}
 	
-	public void update(Company comp) {
+	public void update(Company comp, Connection conn) {
 		String query = "UPDATE company "
 				+ "SET name=" + comp.getName() + "WHERE id=" + comp.getId();
 
-		request(query);
+		request(query, conn);
 	}
 	
-	public List<Company> getAll() {
+	public List<Company> getAll(Connection conn) {
 		String query = "SELECT * FROM company";		
-		return select(query); 
+		return select(query, conn); 
 	}
 	
-	public List<Company> getCriteria(String criteria) {
+	public List<Company> getCriteria(String criteria, Connection conn) {
 		
 		String query = "SELECT * FROM company WHERE " + criteria;
-		return select(query);
+		return select(query, conn);
 	}
 
 
 	
-	private void request(String query) {
+	private void request(String query, Connection conn) {
 		
 		Statement stmt = null;
 		ResultSet results = null;
-		Connection conn = ConnectionManager.getConnection();
 		try {
 			stmt = conn.createStatement();
 			try {
@@ -77,18 +75,16 @@ public class CompanyDAO {
 			e1.printStackTrace();
 		} finally {
 			ConnectionManager.closeStatement(stmt);
-			ConnectionManager.closeConnection(conn);
 			ConnectionManager.closeResultSet(results);			
 		}
 		
 	}
 	
-	public List<Company> select(String query) {
+	public List<Company> select(String query, Connection conn){
 
 		List<Company> liste  = new ArrayList<Company>();	
 		Statement stmt = null;
 		ResultSet results = null;
-		Connection conn = ConnectionManager.getConnection();
 		try {
 			stmt = conn.createStatement();
 			try {
@@ -112,7 +108,6 @@ public class CompanyDAO {
 			e1.printStackTrace();
 		} finally {
 			ConnectionManager.closeStatement(stmt);
-			ConnectionManager.closeConnection(conn);
 			ConnectionManager.closeResultSet(results);	
 		}
 		return liste;

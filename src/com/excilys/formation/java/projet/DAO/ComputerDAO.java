@@ -13,30 +13,28 @@ import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.*;
 import java.sql.Connection;
 
-public class ComputerDAO {
-
+public enum ComputerDAO {
+	
+	INSTANCE;
+	
+	private ComputerDAO() {
+	}
+	
 	private static ConnectionManager cm = null;
 	ResultSet results;
 
-	/* singleton pattern*/
-	private static ComputerDAO compDAO = new ComputerDAO();
 
-	private ComputerDAO() {
+
+	public static ComputerDAO getInstance() {
 		if(cm == null) {
 			ConnectionManager.getInstance();
-		}		
-	}
-
-	synchronized public static ComputerDAO getInstance() {
-		if(compDAO == null) {
-			compDAO = new ComputerDAO();
 		}
 		System.out.println("ComputerDAO getInstance");
-		return compDAO;
+		return INSTANCE;
 	}	
 
 
-	public void insert(Computer comp) { 
+	public void insert(Computer comp, Connection conn) { 
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) "
 				+ "VALUES ('"
 				+ comp.getName() + "', '" 
@@ -44,39 +42,38 @@ public class ComputerDAO {
 				+ comp.getDiscontinued() +"', '" 
 				+ comp.getCompany().getId() + "'); ";
 		System.out.println("insert query: " + query);
-		request(query);		
+		request(query, conn);		
 	}
 
-	public void delete(Computer comp) {
+	public void delete(Computer comp, Connection conn) {
 		
 		String query = "DELETE FROM computer WHERE id=" + comp.getId();
-		request(query);
+		request(query, conn);
 	}
 
-	public void update(Computer comp) {
+	public void update(Computer comp, Connection conn) {
 		String query = "UPDATE computer "
 				+ "SET name='" + comp.getName() + "', introduced='" + comp.getIntroduced() + "', discontinued='" + comp.getDiscontinued() + "', company_id='" + comp.getCompany().getId() + "' WHERE id=" + comp.getId();
 		System.out.println(query);
-		request(query);
+		request(query, conn);
 	}
 
-	public List<Computer> getAll() {
+	public List<Computer> getAll(Connection conn) {
 		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-		return select(query);
+		return select(query, conn);
 	}
 
 
-	public List<Computer> getCriteria(String criteria) {
+	public List<Computer> getCriteria(String criteria, Connection conn) {
 		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id " + criteria;
 		System.out.println(query);
-		return select(query);
+		return select(query, conn);
 
 	}
 
 
-	private void request(String query) {
+	private void request(String query, Connection conn) {
 
-		Connection conn = ConnectionManager.getConnection();
 		Statement stmt = null;
 		try {
 			stmt = conn.createStatement();
@@ -88,8 +85,8 @@ public class ComputerDAO {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-			//			results=null;
-			//			cm.close(stmt, results);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeResultSet(results);
 			try {
 				stmt.close();
 			} catch (SQLException e) {
@@ -99,12 +96,11 @@ public class ComputerDAO {
 
 	}
 
-	public List<Computer> select(String query) {
+	public List<Computer> select(String query, Connection conn) {
 
 		List<Computer> liste  = new ArrayList<Computer>();	
 		Statement stmt = null;
 		ResultSet results = null;
-		Connection conn = ConnectionManager.getConnection();
 		try {
 			stmt = conn.createStatement();
 			try {
@@ -136,7 +132,6 @@ public class ComputerDAO {
 			e1.printStackTrace();
 		} finally {
 			ConnectionManager.closeStatement(stmt);
-			ConnectionManager.closeConnection(conn);
 			ConnectionManager.closeResultSet(results);
 		}
 		return liste;
