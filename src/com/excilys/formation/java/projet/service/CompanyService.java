@@ -12,7 +12,7 @@ public class CompanyService {
 
 	private static CompanyDAO cptdao = CompanyDAO.getInstance();
 	private static LogDAO logdao = LogDAO.getInstance();
-	Company cpt = null;
+	private Company cpt = null;
 	
 	public CompanyService() {
 		// TODO Auto-generated constructor stub

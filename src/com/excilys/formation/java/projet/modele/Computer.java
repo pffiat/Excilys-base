@@ -66,7 +66,6 @@ public class Computer {
 	}
 	
 	public void setName(String namee) {
-		System.out.println("setName of Computer : " + namee);
 		this.name = namee;
 	}
 	
@@ -81,9 +80,7 @@ public class Computer {
 	}
 	
 	public void setCompany(Company cpn) {
-		System.out.println(cpn.getId());
-		company=cpn;
-		
+		company=cpn;		
 	}
 	
 	public String toString() {

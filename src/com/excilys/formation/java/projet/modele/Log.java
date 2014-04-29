@@ -4,9 +4,9 @@ import java.util.Calendar;
 
 public class Log {
 
-	int id;
-	String name;
-	Calendar date;
+	private int id;
+	private String name;
+	private Calendar date;
 	
 	public Log() {
 		this.id = 0;
