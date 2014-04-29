@@ -1,6 +1,8 @@
 package com.excilys.formation.java.projet.service;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import  com.excilys.formation.java.projet.DAO.*;
@@ -8,7 +10,8 @@ import  com.excilys.formation.java.projet.modele.*;
 
 public class CompanyService {
 
-	CompanyDAO cptdao = null;
+	private static CompanyDAO cptdao = CompanyDAO.getInstance();
+	private static LogDAO logdao = LogDAO.getInstance();
 	Company cpt = null;
 	
 	public CompanyService() {
@@ -56,10 +59,12 @@ public class CompanyService {
 
 	public void updateCompany(Company comp) {
 		Connection conn = null;
+		Statement stmt = null;
 		try {
 			conn = connection();
 			this.setCompany(comp);
-			this.cptdao.update(cpt, conn);
+			this.cptdao.update(cpt, conn, stmt);
+			this.logdao.insert(new Log("update companies with id=" + comp.getId()) , conn, stmt);
 			deconnection(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -68,15 +73,20 @@ public class CompanyService {
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
+		} finally {
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeStatement(stmt);
 		}
 	}
 
 	public void deleteCompany(Company comp) {
 		Connection conn = null;
+		Statement stmt = null;
 		try {
 			conn = connection();
 			this.setCompany(comp);
-			this.cptdao.delete(comp, conn);
+			this.cptdao.delete(comp, conn, stmt);
+			this.logdao.insert(new Log("delete companies with id=" + comp.getId()) , conn, stmt);
 			deconnection(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,6 +95,9 @@ public class CompanyService {
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
+		} finally {
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeStatement(stmt);
 		}
 
 	}
@@ -95,10 +108,13 @@ public class CompanyService {
 
 	public List<Company> getAll() {
 		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
 		List<Company> comp = null;
 		try {
 			conn = connection();
-			comp = cptdao.getAll(conn);
+			comp = cptdao.getAll(conn, stmt, results);
+			this.logdao.insert(new Log("get all companies"), conn, stmt);
 			deconnection(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -107,16 +123,23 @@ public class CompanyService {
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
+		} finally {
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeResultSet(results);
 		}
 		return comp;
 	}
 
 	public List<Company> getCriteria(String criteria) {
 		Connection conn = null;
+		Statement stmt = null;
+		ResultSet results = null;
 		List<Company> comp = null;
 		try {
 			conn = connection();
-			comp = cptdao.getCriteria(criteria, conn);
+			comp = cptdao.getCriteria(criteria, conn, stmt, results);
+			this.logdao.insert(new Log("get companies with criteria:"+criteria), conn, stmt);
 			deconnection(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,6 +148,10 @@ public class CompanyService {
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			}
+		} finally {
+			ConnectionManager.closeConnection(conn);
+			ConnectionManager.closeStatement(stmt);
+			ConnectionManager.closeResultSet(results);
 		}
 		return comp;
 	}

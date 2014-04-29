@@ -1,6 +1,5 @@
 package com.excilys.formation.java.projet.DAO;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,102 +12,74 @@ import com.excilys.formation.java.projet.modele.*;
 public enum CompanyDAO {
 
 	INSTANCE;
-	
-	private CompanyDAO() {	
-		
+
+	private CompanyDAO() {
+
 	}
-	
+
 	public static CompanyDAO getInstance() {
-		if(cm == null) {
+		if (cm == null) {
 			ConnectionManager.getInstance();
 		}
 		return INSTANCE;
-	}	
+	}
 
 	private static ConnectionManager cm = null;
-	
-	public void insert(Company comp, Connection conn) { 
-		String query = "INSERT INTO company (id , name) "
-				+ "VALUES ('" + comp.getId() + "', '" + comp.getName() + "') ";
-		
-		request(query, conn);
+
+	public void insert(Company comp, Connection conn, Statement stmt) throws SQLException  {
+		String query = "INSERT INTO company ( name) " + "VALUES ('"
+				+ comp.getName() + "') ";
+
+		request(query, conn, stmt);
 	}
-	
-	public void delete(Company comp, Connection conn) {
+
+	public void delete(Company comp, Connection conn, Statement stmt)  throws SQLException {
 		String query = "DELETE FROM company WHERE id=" + comp.getId();
 
-		request(query, conn);
+		request(query, conn, stmt);
 	}
-	
-	public void update(Company comp, Connection conn) {
-		String query = "UPDATE company "
-				+ "SET name=" + comp.getName() + "WHERE id=" + comp.getId();
 
-		request(query, conn);
+	public void update(Company comp, Connection conn, Statement stmt)  throws SQLException {
+		String query = "UPDATE company " + "SET name='" + comp.getName()
+				+ "' WHERE id=" + comp.getId();
+
+		request(query, conn, stmt);
 	}
-	
-	public List<Company> getAll(Connection conn) {
-		String query = "SELECT * FROM company";		
-		return select(query, conn); 
+
+	public List<Company> getAll(Connection conn, Statement stmt,
+			ResultSet results) throws SQLException  {
+		String query = "SELECT * FROM company";
+		return select(query, conn, stmt, results);
 	}
-	
-	public List<Company> getCriteria(String criteria, Connection conn) {
-		
+
+	public List<Company> getCriteria(String criteria, Connection conn, Statement stmt,
+			ResultSet results) throws SQLException  {
+
 		String query = "SELECT * FROM company WHERE " + criteria;
-		return select(query, conn);
+		return select(query, conn, stmt, results);
 	}
 
+	private void request(String query, Connection conn, Statement stmt) throws SQLException {
 
-	
-	private void request(String query, Connection conn) {
-		
-		Statement stmt = null;
-		ResultSet results = null;
-		try {
-			stmt = conn.createStatement();
-			try {
-				results = stmt.executeQuery(query);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} finally {
-			ConnectionManager.closeStatement(stmt);
-			ConnectionManager.closeResultSet(results);			
-		}
-		
+		stmt = conn.createStatement();
+		stmt.executeQuery(query);
+
 	}
-	
-	public List<Company> select(String query, Connection conn){
 
-		List<Company> liste  = new ArrayList<Company>();	
-		Statement stmt = null;
-		ResultSet results = null;
-		try {
-			stmt = conn.createStatement();
-			try {
+	public List<Company> select(String query, Connection conn, Statement stmt,
+			ResultSet results)
+			throws SQLException {
 
-				System.out.println("results:");
-				results = stmt.executeQuery(query);		
-				try {
-					while(results.next()) {
-						Company cp = new Company();
-						cp.setId(new Integer(results.getInt(1)));
-						cp.setName(results.getString(2));
-						liste.add(cp);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} finally {
-			ConnectionManager.closeStatement(stmt);
-			ConnectionManager.closeResultSet(results);	
+		List<Company> liste = new ArrayList<Company>();
+		stmt = conn.createStatement();
+
+		System.out.println("results:");
+		results = stmt.executeQuery(query);
+		while (results.next()) {
+			Company cp = new Company();
+			cp.setId(new Integer(results.getInt(1)));
+			cp.setName(results.getString(2));
+			liste.add(cp);
 		}
 		return liste;
 	}

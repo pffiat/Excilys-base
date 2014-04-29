@@ -18,6 +18,10 @@ public class Log {
 		this.id = id;
 	}
 	
+	public Log(String name) {
+		this.name = name;
+	}
+	
 	public Log(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -38,6 +42,7 @@ public class Log {
 	}
 
 	public Calendar getDate() {
+		if(date == null ) return Calendar.getInstance();
 		return date;
 	}
 
