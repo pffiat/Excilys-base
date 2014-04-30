@@ -1,6 +1,7 @@
 <jsp:include page="/include/header.jsp" />
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%-- 
+<%@ taglib tagdir="/WEB-INF/tag" prefix="tags" %>  --%>
 
 <section id="main">
 	<h1 id="homeTitle">${nbOfPc} computers found ${nbDisplayed} displayed</h1>
@@ -76,7 +77,8 @@
 				
 			</tbody>
 		</table>
-		<div id="pages">
+		<div id="pages">	<%-- 
+		<tags:pagination /> --%>
 			<c:forEach begin="1" end="${nbOfBouton}" var="i">
 					<a class="btn btn-success" id=${i} href="?page=${i}">${i}</a>
 			</c:forEach>

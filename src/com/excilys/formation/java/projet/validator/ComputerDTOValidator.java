@@ -2,7 +2,6 @@ package com.excilys.formation.java.projet.validator;
 
 import com.excilys.formation.java.projet.DTO.ComputerDTO;
 
-import java.util.List;
 import java.util.regex.*;
 
 public class ComputerDTOValidator {

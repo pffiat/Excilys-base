@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
@@ -17,14 +16,8 @@ public enum ComputerDAO {
 
 	private ComputerDAO() {
 	}
-
-	private static ConnectionManager cm = null;
-
+	
 	public static ComputerDAO getInstance() {
-		if (cm == null) {
-			ConnectionManager.getInstance();
-		}
-		System.out.println("ComputerDAO getInstance");
 		return INSTANCE;
 	}
 

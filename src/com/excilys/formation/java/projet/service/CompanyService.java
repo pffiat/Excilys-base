@@ -10,8 +10,8 @@ import  com.excilys.formation.java.projet.modele.*;
 
 public class CompanyService {
 
-	private static CompanyDAO cptdao = CompanyDAO.getInstance();
-	private static LogDAO logdao = LogDAO.getInstance();
+	private CompanyDAO cptdao = CompanyDAO.getInstance();
+	private LogDAO logdao = LogDAO.getInstance();
 	private Company cpt = null;
 	
 	public CompanyService() {
@@ -21,41 +21,6 @@ public class CompanyService {
 	private void setCompany(Company comp) {
 		cpt = comp;
 	}
-//	
-//	public void insertCompany(Company comp) {
-//		this.setCompany(comp);
-//		this.cpndao.insert(cpn);
-//	}
-//	
-//	public void updateCompany(Company comp) {
-//		this.setCompany(comp);
-//		this.cpndao.update(cpn);
-//	}
-//	
-//	public void deleteCompany(Company comp) {
-//		this.setCompany(comp);
-//		this.cpndao.delete(cpn);
-//	}
-//	
-//	public List<Company> getAll() {
-//		cpndao = cpndao.getInstance();
-//		return cpndao.getAll();
-//	}
-//	public void insertCompany(Company comp) {
-//		Connection conn = null;
-//		try {
-//			conn = connection();
-//			this.cptdao.insert(comp, conn);
-//			deconnection(conn);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			try {
-//				conn.rollback();
-//			} catch (SQLException ex) {
-//				ex.printStackTrace();
-//			}
-//		}
-//	}
 
 	public void updateCompany(Company comp) {
 		Connection conn = null;

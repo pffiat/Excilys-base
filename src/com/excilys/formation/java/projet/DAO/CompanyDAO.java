@@ -18,13 +18,8 @@ public enum CompanyDAO {
 	}
 
 	public static CompanyDAO getInstance() {
-		if (cm == null) {
-			ConnectionManager.getInstance();
-		}
 		return INSTANCE;
 	}
-
-	private static ConnectionManager cm = null;
 
 	public void insert(Company comp, Connection conn, Statement stmt) throws SQLException  {
 		String query = "INSERT INTO company ( name) " + "VALUES ('"

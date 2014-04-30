@@ -11,8 +11,8 @@ import com.excilys.formation.java.projet.modele.*;
 
 public class ComputerService {
 
-	private static ComputerDAO cptdao = ComputerDAO.getInstance();
-	private static LogDAO logdao = LogDAO.getInstance();
+	private ComputerDAO cptdao = ComputerDAO.getInstance();
+	private LogDAO logdao = LogDAO.getInstance();
 	private Computer cpt = null;
 	private static ConnectionManager cm = null;
 

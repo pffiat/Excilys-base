@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.formation.java.projet.modele.Computer;
-import com.excilys.formation.java.projet.service.CompanyService;
 import com.excilys.formation.java.projet.service.ComputerService;
 
 /**

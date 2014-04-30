@@ -18,13 +18,8 @@ public enum LogDAO {
 	}
 
 	public static LogDAO getInstance() {
-		if (cm == null) {
-			ConnectionManager.getInstance();
-		}
 		return INSTANCE;
 	}
-
-	private static ConnectionManager cm = null;
 
 	public void insert(Log log, Connection conn, Statement stmt)  throws SQLException {
 		String query = "INSERT INTO log (name, date) " + "VALUES ('"
@@ -83,109 +78,5 @@ public enum LogDAO {
 		}
 		return liste;
 	}
-	//
-	// ResultSet results;
-	//
-	// public void insert(Log log) {
-	// String query =
-	// "INSERT INTO log (name, introduced, discontinued, logany_id) "
-	// + "VALUES ('"
-	// + log.getName() + "', '"
-	// + log.getDate() + "');" ;
-	// System.out.println("insert query: " + query);
-	// request(query);
-	// }
-	//
-	//
-	// public void delete(Log log) {
-	//
-	// String query = "DELETE FROM log WHERE id=" + log.getId();
-	// request(query);
-	// }
-	//
-	// public void update(Log log) {
-	// String query = "UPDATE log "
-	// + "SET name='" + log.getName() + "', date='" + log.getDate() +
-	// "' WHERE id=" + log.getId();
-	// System.out.println(query);
-	// request(query);
-	// }
-	//
-	// public List<Log> getAll() {
-	// String query = "SELECT * FROM log";
-	// return select(query);
-	// }
-	//
-	//
-	// public List<Log> getCriteria(String criteria) {
-	// String query = "SELECT * FROM log" + criteria;
-	// System.out.println(query);
-	// return select(query);
-	//
-	// }
-	//
-	//
-	// private void request(String query) {
-	//
-	// Connection conn = ConnectionManager.getConnection();
-	// Statement stmt = null;
-	// try {
-	// stmt = conn.createStatement();
-	// try {
-	// stmt.executeUpdate(query);
-	// } catch (SQLException e) {
-	// e.printStackTrace();
-	// }
-	// } catch (SQLException e1) {
-	// e1.printStackTrace();
-	// } finally {
-	// ConnectionManager.closeStatement(stmt);
-	// ConnectionManager.closeConnection(conn);
-	// ConnectionManager.closeResultSet(results);
-	// try {
-	// stmt.close();
-	// } catch (SQLException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
-	//
-	// public List<Log> select(String query) {
-	//
-	// List<Log> liste = new ArrayList<Log>();
-	// Statement stmt = null;
-	// ResultSet results = null;
-	// Connection conn = ConnectionManager.getConnection();
-	// try {
-	// stmt = conn.createStatement();
-	// try {
-	// results = stmt.executeQuery(query);
-	// try {
-	// while(results.next()) {
-	// Log cp = new Log();
-	//
-	// cp.setId(new Integer(results.getInt(1)));
-	// cp.setName(results.getString(2));
-	// cp.setDate(ComputerMapper.stringToCalendar(results.getString(3)));
-	//
-	//
-	// liste.add(cp);
-	// }
-	// } catch (SQLException e) {
-	// e.printStackTrace();
-	// }
-	// } catch (SQLException e) {
-	// e.printStackTrace();
-	// }
-	// } catch (SQLException e1) {
-	// e1.printStackTrace();
-	// } finally {
-	// ConnectionManager.closeStatement(stmt);
-	// ConnectionManager.closeConnection(conn);
-	// ConnectionManager.closeResultSet(results);
-	// }
-	// return liste;
-	// }
 
 }
