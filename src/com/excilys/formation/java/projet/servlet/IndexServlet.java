@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.java.projet.DTO.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDTO;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.service.ComputerService;
 
@@ -17,7 +17,7 @@ import com.excilys.formation.java.projet.service.ComputerService;
  * Servlet implementation class indexServlet
  */
 @WebServlet("/Dashboard")
-public class indexServlet extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	int pageCourante;
 	private int nbDisplayed = 20;
@@ -29,7 +29,7 @@ public class indexServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public indexServlet() {
+	public IndexServlet() {
 		super();
 		pageCourante = 1;
 		// TODO Auto-generated constructor stub

@@ -1,4 +1,4 @@
-package com.excilys.formation.java.projet.DTO;
+package com.excilys.formation.java.projet.dto;
 
 public class ComputerDTO {
 

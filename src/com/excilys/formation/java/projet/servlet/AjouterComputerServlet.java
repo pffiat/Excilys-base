@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.java.projet.DTO.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDTO;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.Company;
 import com.excilys.formation.java.projet.modele.Computer;

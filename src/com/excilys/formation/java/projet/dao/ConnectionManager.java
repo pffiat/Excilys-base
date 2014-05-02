@@ -1,4 +1,4 @@
-package com.excilys.formation.java.projet.DAO;
+package com.excilys.formation.java.projet.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,27 +11,18 @@ import com.jolbox.bonecp.BoneCPConfig;
 public enum ConnectionManager {
 	INSTANCE;
 
+	private static BoneCP connectionPool = null;
+	private static ThreadLocal<Connection> thLocal = new ThreadLocal<Connection>();
+
 	private ConnectionManager() {
+		configureConnPool();
 	}
 
 	public static ConnectionManager getInstance() {
 		return INSTANCE;
 	}
 
-	private static BoneCP connectionPool = null;
-
-	// public static void getInstance() {
-	// System.out.println(cm);
-	// if(cm == null) {
-	// cm = new ConnectionManager();
-	// configureConnPool();
-	// }
-	// System.out.println("ConnectionManager getInstance");
-	// }
-
-
 	private static void configureConnPool() {
-		System.out.println("entrée config");
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // also you need the MySQL
 													// driver
@@ -87,9 +78,6 @@ public enum ConnectionManager {
 		Connection conn = null;
 		try {
 			conn = getConnectionPool().getConnection();
-			// will get a thread-safe connection from the BoneCP connection
-			// pool.
-			// synchronization of the method will be done inside BoneCP source
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,9 +107,15 @@ public enum ConnectionManager {
 	}
 
 	public static void closeConnection(Connection conn) {
+		// try {
+		// if (conn != null)
+		// conn.close(); // release the connection
+		// } catch (SQLException e) {
+		// e.printStackTrace();
+		// }
+
 		try {
-			if (conn != null)
-				conn.close(); // release the connection
+			thLocal.get().close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -129,8 +123,8 @@ public enum ConnectionManager {
 	}
 
 	public static BoneCP getConnectionPool() {
-		if( connectionPool ==null){
-			System.out.println("dans le if");
+		if (connectionPool == null) {
+			System.out.println("connection pool nnulll");
 			configureConnPool();
 		}
 		return connectionPool;
@@ -139,4 +133,44 @@ public enum ConnectionManager {
 	public static void setConnectionPool(BoneCP connectionPool) {
 		ConnectionManager.connectionPool = connectionPool;
 	}
+
+	public static void setConnectionThLocal() {
+		thLocal.set(getConnection());
+	}
+
+	public static Connection getConnectionThLocal() {
+		return thLocal.get();
+	}
+
+	public static void closeConnectionThLocal() {
+		
+		thLocal.remove();
+	}
+
+	public static void deconnection() {
+		try{
+		getConnectionThLocal().commit();
+		getConnectionThLocal().setAutoCommit(true);
+		} catch (SQLException e) {
+			try {
+				getConnectionThLocal().rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		closeConnectionThLocal();
+		
+	}
+
+	public static void connection() {
+		setConnectionThLocal();
+		try {
+			getConnectionThLocal().setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

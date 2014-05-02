@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-import com.excilys.formation.java.projet.DTO.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDTO;
 import com.excilys.formation.java.projet.modele.Company;
 import com.excilys.formation.java.projet.modele.Computer;
 

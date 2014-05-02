@@ -1,6 +1,6 @@
 package com.excilys.formation.java.projet.validator;
 
-import com.excilys.formation.java.projet.DTO.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDTO;
 
 import java.util.regex.*;
 
