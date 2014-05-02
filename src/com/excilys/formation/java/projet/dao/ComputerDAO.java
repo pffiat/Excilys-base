@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.*;
+
 import java.sql.Connection;
 
 public enum ComputerDAO {
@@ -64,6 +65,40 @@ public enum ComputerDAO {
 
 	}
 
+	public int getNumberWithCriteria(String criteria) {
+		String query = "SELECT COUNT(*) FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id "
+				+ criteria;
+		System.out.println("selectcount:"+query);
+		return selectCount(query);
+
+	}
+
+	public int selectCount(String query) {
+
+		Connection conn = ConnectionManager.getConnectionThLocal();
+		Statement stmt = null;
+		ResultSet results = null;
+		int resultInt = 0;
+		try {
+			stmt = conn.createStatement();
+			System.out.println(query);
+			results = stmt.executeQuery(query);
+			results.next();
+			if (results != null)
+				try {
+					resultInt = results.getInt(1);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.closeResultSet(results);
+			ConnectionManager.closeStatement(stmt);
+		}
+		return resultInt;
+	}
+
 	private void request(String query) {
 
 		Statement stmt = null;
@@ -107,7 +142,7 @@ public enum ComputerDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally{
+		} finally {
 			ConnectionManager.closeResultSet(results);
 			ConnectionManager.closeStatement(stmt);
 		}

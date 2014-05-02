@@ -65,4 +65,14 @@ public class ComputerService {
 		ConnectionManager.deconnection();
 		return comp;
 	}
+
+	public int getNumberWithCriteria(String criteria) {
+		int count = 0;
+		ConnectionManager.connection();
+		count = cptdao.getNumberWithCriteria(criteria);
+		logdao.insert(new Log("select count with criteria:" + criteria));
+		ConnectionManager.deconnection();
+		
+		return count;
+	}
 }

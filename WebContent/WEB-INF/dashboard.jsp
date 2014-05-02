@@ -4,7 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tag" prefix="tags" %>  --%>
 
 <section id="main">
-	<h1 id="homeTitle">${nbOfPc} computers found ${nbDisplayed} displayed</h1>
+	<h1 id="homeTitle">${pageWrapper.totalCount} computers found ${pageWrapper.pageLimit} displayed</h1>
 	<div id="actions" class="row">
 		<form action="" method="GET">
 
@@ -63,7 +63,7 @@
 			</thead>
 			<tbody>
 							
-				<c:forEach var="computer" items="${computers}">
+				<c:forEach var="computer" items="${pageWrapper.list}">
 					<tr>
 						<td><a href="#">${computer.name}</a></td>
 						<td>${computer.introduced}</td>
@@ -79,7 +79,7 @@
 		</table>
 		<div id="pages">	<%-- 
 		<tags:pagination /> --%>
-			<c:forEach begin="1" end="${nbOfBouton}" var="i">
+			<c:forEach begin="1" end="${pageWrapper.nbOfBouton}" var="i">
 					<a class="btn btn-success" id=${i} href="?page=${i}">${i}</a>
 			</c:forEach>
 		</div>
