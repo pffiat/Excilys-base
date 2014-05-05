@@ -1,5 +1,6 @@
 package com.excilys.formation.java.projet.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ public class PageWrapper {
 	private int totalCount;
 	private int currentPage = 1;
 	private int pageLimit = 20;
+	private int nbOfLines;
 	private int nbOfBouton;
 	private HttpServletRequest request;
 	private String previousSearch;
@@ -74,11 +76,13 @@ public class PageWrapper {
 
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
+		System.out.println("pageLimit :" + pageLimit );
 		ComputerService cs = new ComputerService();
 		String currentLigne = request.getParameter("lignes");
 		if (currentLigne != null) {
 			pageLimit = Integer.parseInt(currentLigne);
 			pageLimit = pageLimit * 5;
+			System.out.println("pageLimit currentLigne:" + pageLimit +" " + currentLigne);
 		}
 		String currentPageString = request.getParameter("page");
 		if (currentPageString != null) {
@@ -91,31 +95,35 @@ public class PageWrapper {
 		}
 		previousSearch = search;
 
-		String searchComputer = " WHERE computer.name LIKE '%" + search
-				+ "%' OR company.name LIKE '%" + search + "%'";
-
-		String searchQuery = ((search != null && !("".equals(search))) ? searchComputer
-				: "");
-
-		totalCount = cs.getNumberWithCriteria(searchQuery);
-		if (totalCount != 0) {
-			System.out.println(sort);
-			sort.setColumn(request.getParameter("column"));
-			sort.setOrder(request.getParameter("order"));	
-			String criteria = searchQuery + sort.getOrder() + " LIMIT "
-					+ (currentPage * pageLimit - pageLimit) + ","
-					+ pageLimit;
-			System.out.println("criteria: "+criteria);
-			System.out.println(list);
-			list = ComputerMapper.toDTOList(cs.getCriteria(criteria));
-		}
+		totalCount = cs.getNumberWithCriteria(search);
+		initializeList(search, cs);
 		
 		nbOfBouton = (int) (totalCount / pageLimit) + 1;
+		System.out.println("nbOfBouton = (int) (totalCount / pageLimit) + 1: " + nbOfBouton + " " + totalCount + " / " + pageLimit + 1);
 		setList(list);
 		setTotalCount(totalCount);
 		setNbOfBouton(nbOfBouton);
 		setCurrentPage(currentPage);
-		setPageLimit((list!=null) ? list.size() : 0);
+		setNbOfLines((list!=null) ? list.size() : 0);
+		
+	}
+	
+	public int getNbOfLines() {
+		return nbOfLines;
+	}
+
+	public void setNbOfLines(int nbOfLines) {
+		this.nbOfLines = nbOfLines;
+	}
+
+	private void initializeList(String search, ComputerService cs){
+		list = new ArrayList<ComputerDTO>();
+		if (totalCount != 0) {
+			sort.setColumn(request.getParameter("column"));
+			sort.setOrder(request.getParameter("order"));
+			System.out.println("currentPage * pageLimit - pageLimit ||| pageLimit: " + (currentPage * pageLimit - pageLimit) + " ||| " + pageLimit);
+			list = ComputerMapper.toDTOList(cs.getCriteria(search, sort, (currentPage * pageLimit - pageLimit), pageLimit));
+		}
 		
 	}
 

@@ -29,9 +29,15 @@ public class Sort {
 	public void setOrder(String order) {
 		this.order = "";
 		if (order != null && !"".equals(order)) {
-			this.order = " ORDER BY " + getColumn() + " " + order;
+			this.order = order;
 		}
 		
+	}
+	
+	public boolean needOrder(){
+		boolean bool = true;
+		if("".equals(this.order)) bool = false;
+		return bool;
 	}
 
 }

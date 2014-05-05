@@ -4,7 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tag" prefix="tags" %>  --%>
 
 <section id="main">
-	<h1 id="homeTitle">${pageWrapper.totalCount} computers found ${pageWrapper.pageLimit} displayed</h1>
+	<h1 id="homeTitle">${pageWrapper.totalCount} computers found ${pageWrapper.nbOfLines} displayed</h1>
 	<div id="actions" class="row">
 		<form action="" method="GET">
 

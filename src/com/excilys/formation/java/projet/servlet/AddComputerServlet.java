@@ -18,7 +18,7 @@ import com.excilys.formation.java.projet.service.ComputerService;
 import com.excilys.formation.java.projet.validator.ComputerDTOValidator;
 
 @WebServlet("/AjouterComputerServlet")
-public class AjouterComputerServlet extends HttpServlet {
+public class AddComputerServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
        

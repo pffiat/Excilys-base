@@ -2,6 +2,7 @@ package com.excilys.formation.java.projet.service;
 
 import java.util.List;
 
+import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.dao.*;
 import com.excilys.formation.java.projet.modele.*;
 
@@ -57,10 +58,10 @@ public class ComputerService {
 		return comp;
 	}
 
-	public List<Computer> getCriteria(String criteria) {
+	public List<Computer> getCriteria(String criteria, Sort sort, int i, int pageLimit) {
 		List<Computer> comp = null;
 		ConnectionManager.connection();
-		comp = cptdao.getCriteria(criteria);
+		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
 		logdao.insert(new Log("get computers with criteria:" + criteria));
 		ConnectionManager.deconnection();
 		return comp;
