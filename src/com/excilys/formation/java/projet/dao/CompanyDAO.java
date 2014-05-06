@@ -1,43 +1,13 @@
 package com.excilys.formation.java.projet.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.java.projet.modele.*;
 
-public enum CompanyDAO {
+public interface CompanyDAO {
 
-	INSTANCE;
 
-	private CompanyDAO() {
 
-	}
-
-	public static CompanyDAO getInstance() {
-		return INSTANCE;
-	}
-
-	public List<Company> getAll() {	
-		
-		List<Company> liste = new ArrayList<Company>();
-		PreparedStatement stmt = null;
-		ResultSet results = null;
-		try {
-			stmt = ConnectionManager.getConnectionThLocal().prepareStatement("SELECT * FROM company");			
-			results = stmt.executeQuery();
-			while (results.next()) {
-				Company cp = new Company();
-				cp.setId(new Integer(results.getInt(1)));
-				cp.setName(results.getString(2));
-				liste.add(cp);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return liste;
-	}
+	public List<Company> getAll();
 
 }

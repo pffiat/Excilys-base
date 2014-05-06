@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.dao.*;
+import com.excilys.formation.java.projet.dao.impl.*;
 import com.excilys.formation.java.projet.modele.*;
 
 public class ComputerService {
 
-	private ComputerDAO cptdao = ComputerDAO.getInstance();
-	private LogDAO logdao = LogDAO.getInstance();
+	private ComputerDAO cptdao = ComputerDAOImpl.getInstance();
+	private LogDAO logdao = LogDAOImpl.getInstance();
 	private Computer cpt = null;
 
 	public ComputerService() {

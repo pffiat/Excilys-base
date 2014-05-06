@@ -3,12 +3,13 @@ package com.excilys.formation.java.projet.service;
 import java.util.List;
 
 import com.excilys.formation.java.projet.dao.*;
+import com.excilys.formation.java.projet.dao.impl.*;
 import com.excilys.formation.java.projet.modele.*;
 
 public class CompanyService {
 
-	private CompanyDAO cptdao = CompanyDAO.getInstance();
-	private LogDAO logdao = LogDAO.getInstance();
+	private CompanyDAO cptdao = CompanyDAOImpl.getInstance();
+	private LogDAO logdao = LogDAOImpl.getInstance();
 
 	public CompanyService() {
 	}
