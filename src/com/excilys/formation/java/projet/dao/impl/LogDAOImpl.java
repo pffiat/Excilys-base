@@ -4,19 +4,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Repository;
+
 import com.excilys.formation.java.projet.modele.Log;
 import com.excilys.formation.java.projet.dao.*;
 
-public enum LogDAOImpl implements LogDAO{
+@Repository("logDao")
+public class LogDAOImpl implements LogDAO {
 
-	INSTANCE;
-
-	private LogDAOImpl() {
-	}
-
-	public static LogDAOImpl getInstance() {
-		return INSTANCE;
-	}
 
 	public void insert(Log log) {
 		String query = "INSERT INTO log (name, date) VALUES (?, ?);";

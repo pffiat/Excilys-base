@@ -5,21 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.excilys.formation.java.projet.dao.*;
 
+import org.springframework.stereotype.Repository;
+
+import com.excilys.formation.java.projet.dao.*;
 import com.excilys.formation.java.projet.modele.*;
 
-public enum CompanyDAOImpl implements CompanyDAO {
+@Repository("companyDao")
+public class CompanyDAOImpl implements CompanyDAO {
 
-	INSTANCE;
-
-	private CompanyDAOImpl() {
-
-	}
-
-	public static CompanyDAOImpl getInstance() {
-		return INSTANCE;
-	}
 
 	public List<Company> getAll() {	
 		

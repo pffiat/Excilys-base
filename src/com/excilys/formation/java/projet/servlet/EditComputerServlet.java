@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.java.projet.dto.ComputerDTO;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.Company;
@@ -17,28 +19,19 @@ import com.excilys.formation.java.projet.service.CompanyService;
 import com.excilys.formation.java.projet.service.ComputerService;
 import com.excilys.formation.java.projet.validator.ComputerDTOValidator;
 
-/**
- * Servlet implementation class EditComputerServlet
- */
+
 @WebServlet("/EditComputerServlet")
 public class EditComputerServlet extends HttpServlet {
+	
+	@Autowired
+	private CompanyService cs;
+	@Autowired
+	private ComputerService cpts;
 	private static final long serialVersionUID = 1L;
     private int idPrivate;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public EditComputerServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+ 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
         ComputerDTO cpt = new ComputerDTO();
-		CompanyService cs = new CompanyService();
 		List<Company> liste = cs.getAll();
 		String id = request.getParameter("id");
 		System.out.println("id: " + id);
@@ -64,12 +57,8 @@ public class EditComputerServlet extends HttpServlet {
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ComputerService cs = new ComputerService();
         ComputerDTO dto = new ComputerDTO();
         dto.setId(idPrivate);
 		dto.setName(request.getParameter("name"));	
@@ -85,15 +74,14 @@ public class EditComputerServlet extends HttpServlet {
   		int codeError = v.testComputerDTO(dto);
 		if(codeError != 0) {
 			Computer cpn = ComputerMapper.fromDTO(dto);
-			cs.updateComputer(cpn);
+			cpts.updateComputer(cpn);
 			response.sendRedirect("");
 		}else{
 			request.setAttribute("name", dto.getName());
 			request.setAttribute("introduced", dto.getIntroduced());
 			request.setAttribute("discontinued", dto.getDiscontinued());
 			request.setAttribute("company_id", dto.getCompany_id());
-			CompanyService cp = new CompanyService();
-			List<Company> liste = cp.getAll();
+			List<Company> liste = cs.getAll();
 			request.setAttribute("company_name", liste.get(dto.getCompany_id()).getName());
 			liste.remove(dto.getCompany_id());
 			request.setAttribute("companies", liste);

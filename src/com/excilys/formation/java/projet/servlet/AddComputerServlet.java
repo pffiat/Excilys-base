@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.java.projet.dto.ComputerDTO;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.Company;
@@ -20,22 +22,23 @@ import com.excilys.formation.java.projet.validator.ComputerDTOValidator;
 @WebServlet("/AjouterComputerServlet")
 public class AddComputerServlet extends HttpServlet {
 	
+    @Autowired
+    private CompanyService cpts;
+    @Autowired
+    private ComputerService cs;
 	private static final long serialVersionUID = 1L;
-       
 
-    public void init() {
+	public void init() {
     }
  
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	 
-		CompanyService cs = new CompanyService();
-		List<Company> liste = cs.getAll();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Company> liste = cpts.getAll();
 		request.setAttribute("companies", liste);
 		request.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(request , response);
 		
 	}
  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ComputerService cs = new ComputerService();
         ComputerDTO dto = new ComputerDTO();
 		dto.setName(request.getParameter("name"));	
 		dto.setIntroduced(request.getParameter("introduced"));

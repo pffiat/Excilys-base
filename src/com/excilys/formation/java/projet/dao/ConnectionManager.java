@@ -5,22 +5,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.stereotype.Component;
+
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public enum ConnectionManager {
-	INSTANCE;
+@Component("connectionManager")
+public class ConnectionManager {
 
 	private static BoneCP connectionPool = null;
 	private static ThreadLocal<Connection> thLocal = new ThreadLocal<Connection>();
 
-	private ConnectionManager() {
-		configureConnPool();
-	}
 
-	public static ConnectionManager getInstance() {
-		return INSTANCE;
-	}
 
 	private static void configureConnPool() {
 		try {
@@ -145,6 +141,7 @@ public enum ConnectionManager {
 	}
 
 	public static void connection() {
+		System.out.println("connection manager connection");
 		setConnectionThLocal();
 		try {
 			getConnectionThLocal().setAutoCommit(false);

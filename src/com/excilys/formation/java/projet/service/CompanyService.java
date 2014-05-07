@@ -2,14 +2,21 @@ package com.excilys.formation.java.projet.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.java.projet.dao.*;
-import com.excilys.formation.java.projet.dao.impl.*;
+import com.excilys.formation.java.projet.dao.impl.CompanyDAOImpl;
+import com.excilys.formation.java.projet.dao.impl.LogDAOImpl;
 import com.excilys.formation.java.projet.modele.*;
 
+@Service("companyService")
 public class CompanyService {
 
-	private CompanyDAO cptdao = CompanyDAOImpl.getInstance();
-	private LogDAO logdao = LogDAOImpl.getInstance();
+	@Autowired
+	private CompanyDAOImpl cptdao;
+	@Autowired
+	private LogDAOImpl logdao;
 
 	public CompanyService() {
 	}

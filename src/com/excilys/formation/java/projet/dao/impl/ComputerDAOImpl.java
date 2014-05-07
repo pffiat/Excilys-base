@@ -14,16 +14,11 @@ import com.excilys.formation.java.projet.dao.*;
 
 import java.sql.Connection;
 
-public enum ComputerDAOImpl implements ComputerDAO{
+import org.springframework.stereotype.Repository;
 
-	INSTANCE;
+@Repository("computerDao")
+public class ComputerDAOImpl implements ComputerDAO{
 
-	private ComputerDAOImpl() {
-	}
-
-	public static ComputerDAOImpl getInstance() {
-		return INSTANCE;
-	}
 
 	public void insert(Computer comp) {
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) "
@@ -94,7 +89,7 @@ public enum ComputerDAOImpl implements ComputerDAO{
 				if (results != null)
 					try {
 						Computer cp = new Computer();
-
+						
 						cp.setId(new Integer(results.getInt(1)));
 						cp.setName(results.getString(2));
 						cp.setIntroduced(ComputerMapper.stringToCalendar(results
@@ -107,7 +102,6 @@ public enum ComputerDAOImpl implements ComputerDAO{
 						comp.setId(results.getInt(5));
 						comp.setName(results.getString(7));
 						cp.setCompany(comp);
-
 						liste.add(cp);
 
 					} catch (SQLException e) {

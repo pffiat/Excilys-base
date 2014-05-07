@@ -1,15 +1,18 @@
 package com.excilys.formation.java.projet.common;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.java.projet.dto.ComputerDTO;
-import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.service.ComputerService;
 
 public class PageWrapper {
+	
+	@Autowired
+	private ComputerService cs;
 	
 	private List<ComputerDTO> list;
 	private int totalCount;
@@ -17,6 +20,7 @@ public class PageWrapper {
 	private int pageLimit = 20;
 	private int nbOfLines;
 	private int nbOfBouton;
+	private String search;
 	private HttpServletRequest request;
 	private String previousSearch;
 	private Sort sort = new Sort();
@@ -44,10 +48,13 @@ public class PageWrapper {
 
 	public void setList(List<ComputerDTO> list) {
 		this.list = list;
+		System.out.println("list pageWrapper beginning: "+this.list.get(0));
+		
 	}
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
+		initializeList(search);
 	}
 
 	public void setCurrentPage(int currentPage) {
@@ -77,7 +84,6 @@ public class PageWrapper {
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
 		System.out.println("pageLimit :" + pageLimit );
-		ComputerService cs = new ComputerService();
 		String currentLigne = request.getParameter("lignes");
 		if (currentLigne != null) {
 			pageLimit = Integer.parseInt(currentLigne);
@@ -88,24 +94,23 @@ public class PageWrapper {
 		if (currentPageString != null) {
 			currentPage = Integer.parseInt(currentPageString);
 		}
-		String search = request.getParameter("search");
+		search = request.getParameter("search");
 
 		if (currentPageString != null || currentLigne != null) {
 			search = previousSearch;
 		}
 		previousSearch = search;
-
-		totalCount = cs.getNumberWithCriteria(search);
-		initializeList(search, cs);
+		System.out.println("\nsearch: "+search);
+		setSearch(search);
 		
+	}
+	
+	public void setAttribute(){		
 		nbOfBouton = (int) (totalCount / pageLimit) + 1;
-		System.out.println("nbOfBouton = (int) (totalCount / pageLimit) + 1: " + nbOfBouton + " " + totalCount + " / " + pageLimit + 1);
-		setList(list);
 		setTotalCount(totalCount);
 		setNbOfBouton(nbOfBouton);
 		setCurrentPage(currentPage);
 		setNbOfLines((list!=null) ? list.size() : 0);
-		
 	}
 	
 	public int getNbOfLines() {
@@ -116,13 +121,19 @@ public class PageWrapper {
 		this.nbOfLines = nbOfLines;
 	}
 
-	private void initializeList(String search, ComputerService cs){
-		list = new ArrayList<ComputerDTO>();
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
+	private void initializeList(String search){
 		if (totalCount != 0) {
 			sort.setColumn(request.getParameter("column"));
 			sort.setOrder(request.getParameter("order"));
 			System.out.println("currentPage * pageLimit - pageLimit ||| pageLimit: " + (currentPage * pageLimit - pageLimit) + " ||| " + pageLimit);
-			list = ComputerMapper.toDTOList(cs.getCriteria(search, sort, (currentPage * pageLimit - pageLimit), pageLimit));
 		}
 		
 	}

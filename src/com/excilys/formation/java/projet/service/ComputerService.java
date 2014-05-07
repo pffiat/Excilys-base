@@ -2,21 +2,23 @@ package com.excilys.formation.java.projet.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.dao.*;
-import com.excilys.formation.java.projet.dao.impl.*;
+import com.excilys.formation.java.projet.dao.impl.ComputerDAOImpl;
+import com.excilys.formation.java.projet.dao.impl.LogDAOImpl;
 import com.excilys.formation.java.projet.modele.*;
 
+@Service("computerService")
 public class ComputerService {
 
-	private ComputerDAO cptdao = ComputerDAOImpl.getInstance();
-	private LogDAO logdao = LogDAOImpl.getInstance();
-	private Computer cpt = null;
-
-	public ComputerService() {
-		cpt = new Computer();
-		ConnectionManager.getInstance();
-	}
+	@Autowired
+	private ComputerDAOImpl cptdao;
+	@Autowired
+	private LogDAOImpl logdao;
+	private Computer cpt = new Computer();
 
 	private void setComputer(Computer comp) {
 		cpt = comp;
@@ -65,6 +67,7 @@ public class ComputerService {
 		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
 		logdao.insert(new Log("get computers with criteria:" + criteria));
 		ConnectionManager.deconnection();
+		System.out.println("list beginning: "+comp.get(0));
 		return comp;
 	}
 
