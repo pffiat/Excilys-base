@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.projet.common.PageWrapper;
@@ -17,6 +20,7 @@ import com.excilys.formation.java.projet.dto.*;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.service.ComputerService;
 
+@Controller
 @WebServlet("/Dashboard")
 public class IndexServlet extends HttpServlet {
 	
@@ -34,6 +38,7 @@ public class IndexServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(request);
@@ -49,10 +54,6 @@ public class IndexServlet extends HttpServlet {
 		request.setAttribute("pageWrapper", pageWrapper);
 		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp")
 				.forward(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
 	}
 
 }

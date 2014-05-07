@@ -9,11 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.formation.java.projet.modele.Computer;
 import com.excilys.formation.java.projet.service.ComputerService;
 
-
+@Controller
 @WebServlet("/DeleteComputerServlet")
 public class DeleteComputerServlet extends HttpServlet {
 	
@@ -21,6 +24,7 @@ public class DeleteComputerServlet extends HttpServlet {
 	private ComputerService cs;
 	private static final long serialVersionUID = 1L;
 
+	@RequestMapping(method = RequestMethod.GET)
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		System.out.println("id: " + id);
@@ -31,8 +35,4 @@ public class DeleteComputerServlet extends HttpServlet {
 		}
 		response.sendRedirect("");
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
-
 }
