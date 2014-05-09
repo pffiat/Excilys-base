@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-import com.excilys.formation.java.projet.dto.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDto;
 import com.excilys.formation.java.projet.modele.Company;
 import com.excilys.formation.java.projet.modele.Computer;
 
@@ -17,26 +17,26 @@ public class ComputerMapper {
 		// TODO Auto-generated constructor stub
 	}
 
-	public final static Computer fromDTO( ComputerDTO dto){
+	public final static Computer fromDTO( ComputerDto dto){
 		Company c = new Company(dto.getCompany_id(), dto.getCompany());
 		return new Computer(dto.getId(), dto.getName(), stringToCalendar(dto.getIntroduced()) , stringToCalendar(dto.getDiscontinued()), c);
 	}
 
-	public final static ComputerDTO toDTO( Computer cpn) {
-		return new ComputerDTO(cpn.getId(), cpn.getName(), calendarToString(cpn.getIntroduced()), calendarToString(cpn.getDiscontinued()), cpn.getCompany().getId(), cpn.getCompany().getName());
+	public final static ComputerDto toDTO( Computer cpn) {
+		return new ComputerDto(cpn.getId(), cpn.getName(), calendarToString(cpn.getIntroduced()), calendarToString(cpn.getDiscontinued()), cpn.getCompany().getId(), cpn.getCompany().getName());
 	}
 
-	public final static List<ComputerDTO> toDTOList(List<Computer> cl){
-		List<ComputerDTO> dto = new ArrayList<ComputerDTO>();
+	public final static List<ComputerDto> toDTOList(List<Computer> cl){
+		List<ComputerDto> dto = new ArrayList<ComputerDto>();
 		for(Iterator<Computer> i = cl.iterator(); i.hasNext(); ) {
 			dto.add(toDTO(i.next()));
 		}
 		return dto;
 	}
 
-	public final static List<Computer> fromDTOList(List<ComputerDTO> dto){
+	public final static List<Computer> fromDTOList(List<ComputerDto> dto){
 		List<Computer> cl = new ArrayList<Computer>();
-		for(Iterator<ComputerDTO> i = dto.iterator(); i.hasNext(); ) {
+		for(Iterator<ComputerDto> i = dto.iterator(); i.hasNext(); ) {
 			cl.add(fromDTO(i.next()));
 		}
 		return cl;

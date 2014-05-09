@@ -1,6 +1,6 @@
 package com.excilys.formation.java.projet.validator;
 
-import com.excilys.formation.java.projet.dto.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDto;
 
 import java.util.regex.*;
 
@@ -19,7 +19,7 @@ public class ComputerDTOValidator {
 		this.codeError = codeError;
 	}
 
-	public int testComputerDTO(ComputerDTO dto){
+	public int testComputerDTO(ComputerDto dto){
 		ValidatorMessage vm = new ValidatorMessage();
 		testName(dto.getName(), 0);                                               
 		if(testDate(dto.getIntroduced(), 1) & testDate(dto.getDiscontinued(), 2))  

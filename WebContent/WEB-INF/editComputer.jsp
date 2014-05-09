@@ -7,7 +7,7 @@
 
 	<h1>Edit Computer</h1>
 
-	<form action="EditComputerServlet" method="POST">
+	<form action="EditComputer" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>

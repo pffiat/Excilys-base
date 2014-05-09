@@ -41,7 +41,7 @@
 			</div>
 			<div class="col-md-1"></div>
 			<div class="col-md-1">
-				<a class="btn btn-success" id="add" href="AjouterComputerServlet">Add Computer</a>
+				<a class="btn btn-success" id="add" href="AddComputer">Add Computer</a>
 			</div>			 
 			</form>
 	</div>
@@ -69,8 +69,8 @@
 						<td>${computer.introduced}</td>
 						<td>${computer.discontinued}</td>
 						<td>${computer.company}</td>
-						<td><a class="btn btn-warning" id="update" href="EditComputerServlet?id=${computer.id}&name=${computer.name}&introduced=${computer.introduced}&discontinued=${computer.discontinued}&comp_id=${computer.company_id}&comp_name=${computer.company}">Update</a></td>
-						<td><a class="btn btn-danger" id="delete" href="DeleteComputerServlet?id=${computer.id}">Delete</a></td>
+						<td><a class="btn btn-warning" id="update" href="EditComputer?id=${computer.id}&name=${computer.name}&introduced=${computer.introduced}&discontinued=${computer.discontinued}&comp_id=${computer.company_id}&comp_name=${computer.company}">Update</a></td>
+						<td><a class="btn btn-danger" id="delete" href="DeleteComputer?id=${computer.id}">Delete</a></td>
 					</tr>		
 				</c:forEach>
 

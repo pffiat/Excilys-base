@@ -1,20 +1,17 @@
-package com.excilys.formation.java.projet.servlet;
+package com.excilys.formation.java.projet.controller;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.java.projet.dto.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDto;
 import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.Company;
 import com.excilys.formation.java.projet.modele.Computer;
@@ -23,22 +20,22 @@ import com.excilys.formation.java.projet.service.ComputerService;
 import com.excilys.formation.java.projet.validator.ComputerDTOValidator;
 
 @Controller
-@WebServlet("/EditComputerServlet")
-public class EditComputerServlet extends HttpServlet {
+@RequestMapping("/EditComputer")
+public class EditComputer {
 	
 	@Autowired
 	private CompanyService cs;
 	@Autowired
 	private ComputerService cpts;
-	private static final long serialVersionUID = 1L;
     private int idPrivate;
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ComputerDTO cpt = new ComputerDTO();
+	protected ModelAndView doGet(HttpServletRequest request) throws ServletException, IOException {
+		
+		ModelAndView mav = new ModelAndView("editComputer");
+        ComputerDto cpt = new ComputerDto();
 		List<Company> liste = cs.getAll();
 		String id = request.getParameter("id");
-		System.out.println("id: " + id);
 		if(id != null) {
 			idPrivate = Integer.parseInt(id);
 		}
@@ -46,25 +43,27 @@ public class EditComputerServlet extends HttpServlet {
 		cpt.setIntroduced(request.getParameter("introduced"));
 		cpt.setDiscontinued(request.getParameter("discontinued"));
 		Company cpn = new Company();
-		System.out.println("company recue:"+request.getParameter("comp_name")+request.getParameter("comp_id"));
+		
 		if(request.getParameter("comp_id") != null) {
 			cpn.setName(request.getParameter("comp_name"));
 			cpn.setId(new Integer(request.getParameter("comp_id")));
 		} else {
 			cpn.setId(0);
 		}
-		request.setAttribute("computer", cpt);
-		request.setAttribute("cpn", cpn);
+		
+		mav.addObject("computer", cpt);
+		mav.addObject("cpn", cpn);
 		liste.remove(cpn);
-		request.setAttribute("companies", liste);
-		request.getRequestDispatcher("/WEB-INF/EditComputer.jsp").forward(request , response);
+		mav.addObject("companies", liste);
+		return mav;
 		
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.POST)
+	protected ModelAndView doPost(HttpServletRequest request) throws ServletException, IOException {
 
-        ComputerDTO dto = new ComputerDTO();
+		ModelAndView mav = null;
+        ComputerDto dto = new ComputerDto();
         dto.setId(idPrivate);
 		dto.setName(request.getParameter("name"));	
 		dto.setIntroduced(request.getParameter("introduced"));
@@ -80,18 +79,15 @@ public class EditComputerServlet extends HttpServlet {
 		if(codeError != 0) {
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cpts.updateComputer(cpn);
-			response.sendRedirect("");
+			mav = new ModelAndView("dashboard");
 		}else{
-			request.setAttribute("name", dto.getName());
-			request.setAttribute("introduced", dto.getIntroduced());
-			request.setAttribute("discontinued", dto.getDiscontinued());
-			request.setAttribute("company_id", dto.getCompany_id());
+			mav = new ModelAndView("editComputer");
+			mav.addObject(dto);
 			List<Company> liste = cs.getAll();
-			request.setAttribute("company_name", liste.get(dto.getCompany_id()).getName());
 			liste.remove(dto.getCompany_id());
-			request.setAttribute("companies", liste);
-			request.getRequestDispatcher("/WEB-INF/EditComputer.jsp").forward(request , response);
+			mav.addObject("companies", liste);
 		}
+		return mav;
 	}
 
 }

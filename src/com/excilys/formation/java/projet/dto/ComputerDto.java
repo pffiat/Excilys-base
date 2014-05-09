@@ -1,6 +1,6 @@
 package com.excilys.formation.java.projet.dto;
 
-public class ComputerDTO {
+public class ComputerDto {
 
 	private int id = 0;
 	private String name;
@@ -9,10 +9,10 @@ public class ComputerDTO {
 	private int company_id = 0;
 	private String company;
 
-	public ComputerDTO() {
+	public ComputerDto() {
 	}
 
-	public ComputerDTO(int id, String name, String introduced,
+	public ComputerDto(int id, String name, String introduced,
 			String discontinued, int company_id, String company) {
 		super();
 		this.id = id;
@@ -78,7 +78,7 @@ public class ComputerDTO {
 				+ ", company_id=" + company_id + ", company=" + company + "]";
 	}
 
-	private ComputerDTO(Builder b) {
+	private ComputerDto(Builder b) {
 		this.setName(b.getName());
 		this.setId(b.getId());
 		this.setIntroduced(b.getIntroduced());
@@ -183,8 +183,8 @@ public class ComputerDTO {
 			this.company = company;
 		}
 
-		public ComputerDTO build() {
-			return new ComputerDTO(this);
+		public ComputerDto build() {
+			return new ComputerDto(this);
 		}
 
 	}

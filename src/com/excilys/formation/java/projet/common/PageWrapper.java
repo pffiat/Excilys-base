@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.formation.java.projet.dto.ComputerDTO;
+import com.excilys.formation.java.projet.dto.ComputerDto;
 import com.excilys.formation.java.projet.service.ComputerService;
 
 public class PageWrapper {
@@ -14,7 +14,7 @@ public class PageWrapper {
 	@Autowired
 	private ComputerService cs;
 	
-	private List<ComputerDTO> list;
+	private List<ComputerDto> list;
 	private int totalCount;
 	private int currentPage = 1;
 	private int pageLimit = 20;
@@ -26,7 +26,7 @@ public class PageWrapper {
 	private Sort sort = new Sort();
 
 	
-	public List<ComputerDTO> getList() {
+	public List<ComputerDto> getList() {
 		return list;
 	}
 
@@ -46,7 +46,7 @@ public class PageWrapper {
 		return sort;
 	}
 
-	public void setList(List<ComputerDTO> list) {
+	public void setList(List<ComputerDto> list) {
 		this.list = list;
 		System.out.println("list pageWrapper beginning: "+this.list.get(0));
 		

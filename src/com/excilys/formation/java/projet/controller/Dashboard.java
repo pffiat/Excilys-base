@@ -1,19 +1,13 @@
-package com.excilys.formation.java.projet.servlet;
+package com.excilys.formation.java.projet.controller;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.java.projet.common.PageWrapper;
 import com.excilys.formation.java.projet.dto.*;
@@ -21,39 +15,31 @@ import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.service.ComputerService;
 
 @Controller
-@WebServlet("/Dashboard")
-public class IndexServlet extends HttpServlet {
+@RequestMapping("/Dashboard")
+public class Dashboard {
 	
 	@Autowired
 	private ComputerService cpts;
-	
-	private static final long serialVersionUID = 1L;
 	private String search;
 	private PageWrapper pageWrapper = new PageWrapper();
 	
-	
 
-	@Override
-	public void init() throws ServletException {
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request);
+	protected ModelAndView doGet(HttpServletRequest request) {
+
+		ModelAndView mav = new ModelAndView("dashboard");
 		pageWrapper.setRequest(request);
 		search = pageWrapper.getSearch();
 		ComputerService cs = cpts;
 		pageWrapper.setTotalCount(cs.getNumberWithCriteria(search));
 
-		List<ComputerDTO> comp = null;
+		List<ComputerDto> comp = null;
 		comp = ComputerMapper.toDTOList(cs.getCriteria(search, pageWrapper.getSort(), (pageWrapper.getCurrentPage() * pageWrapper.getPageLimit() - pageWrapper.getPageLimit()), pageWrapper.getPageLimit()));
 		pageWrapper.setList(comp);
 		pageWrapper.setAttribute();
-		request.setAttribute("pageWrapper", pageWrapper);
-		getServletContext().getRequestDispatcher("/WEB-INF/dashboard.jsp")
-				.forward(request, response);
+		mav.addObject("pageWrapper", pageWrapper);
+		return mav;
 	}
 
 }

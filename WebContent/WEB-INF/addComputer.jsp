@@ -8,7 +8,7 @@
 
 	<h1>Add Computer</h1>
 
-	<form action="AjouterComputerServlet" method="POST">
+	<form action="AddComputer" method="POST">
 		<fieldset>
 			<div class="clearfix">
 				<label for="name">Computer name:</label>
