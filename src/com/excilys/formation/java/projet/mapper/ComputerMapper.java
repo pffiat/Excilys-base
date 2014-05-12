@@ -14,11 +14,11 @@ import com.excilys.formation.java.projet.modele.Computer;
 public class ComputerMapper {
 
 	public ComputerMapper() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public final static Computer fromDTO( ComputerDto dto){
 		Company c = new Company(dto.getCompany_id(), dto.getCompany());
+		System.out.println("id from dto:"+dto.getCompany_id());
 		return new Computer(dto.getId(), dto.getName(), stringToCalendar(dto.getIntroduced()) , stringToCalendar(dto.getDiscontinued()), c);
 	}
 

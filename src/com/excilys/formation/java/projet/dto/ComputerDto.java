@@ -1,11 +1,26 @@
 package com.excilys.formation.java.projet.dto;
 
+
+
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ComputerDto {
 
 	private int id = 0;
+	
+	@NotEmpty
 	private String name;
+	
+    @DateTimeFormat(pattern="dd-MM-yyyy")
 	private String introduced;
+    
+    @DateTimeFormat(pattern="dd-MM-yyyy")
 	private String discontinued;
+    
+    @Range(min=0)
 	private int company_id = 0;
 	private String company;
 

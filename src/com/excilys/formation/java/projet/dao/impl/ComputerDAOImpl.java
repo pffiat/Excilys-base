@@ -14,6 +14,7 @@ import com.excilys.formation.java.projet.dao.*;
 
 import java.sql.Connection;
 
+import org.springframework.asm.Type;
 import org.springframework.stereotype.Repository;
 
 @Repository("computerDao")
@@ -22,13 +23,14 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 	public void insert(Computer comp) {
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) "
-				+ "VALUES (?,?,?,?'); ";
+				+ "VALUES (?,?,?,?); ";
+		System.out.println(comp);
 		request(query, comp, "insert");
 	}
 
 	public void delete(Computer comp) {
 
-		String query = "DELETE FROM computer WHERE id=?";
+		String query = "DELETE FROM computer WHERE id= ?";
 		request(query, comp, "delete");
 	}
 
@@ -156,6 +158,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 	private void request(String query, Computer comp, String request) {
 
 		PreparedStatement stmt = null;
+		System.out.println(query);
 		try {
 			stmt = ConnectionManager.getConnectionThLocal().prepareStatement(
 					query);
@@ -163,19 +166,28 @@ public class ComputerDAOImpl implements ComputerDAO{
 				stmt.setString(1, comp.getName());
 				stmt.setDate(2, (Date) comp.getIntroduced().getTime());
 				stmt.setDate(3, (Date) comp.getDiscontinued().getTime());
-				stmt.setInt(4, comp.getCompany().getId());
-				stmt.setInt(5, comp.getCompany().getId());
-				stmt.executeUpdate(query);
+				if(comp.getCompany().getId()>0) {
+					stmt.setInt(4, comp.getCompany().getId());
+				} else {
+					stmt.setNull(4, Type.INT);
+				}
+				stmt.setString(5, comp.getCompany().getName());
+				stmt.executeUpdate();
 			}
 			if ("delete".equals(request)) {
-				stmt.setInt(1, comp.getCompany().getId());
+				stmt.setInt(1, comp.getId());
+				stmt.executeUpdate();
 			}
 			if ("insert".equals(request)) {
 				stmt.setString(1, comp.getName());
 				stmt.setDate(2, new Date(comp.getIntroduced().getTime().getTime()));
 				stmt.setDate(3, new Date(comp.getDiscontinued().getTime().getTime()));
-				stmt.setInt(4, comp.getCompany().getId());
-
+				if(comp.getCompany().getId()>0) {
+					stmt.setInt(4, comp.getCompany().getId());
+				} else {
+					stmt.setNull(4, Type.INT);
+				}
+				stmt.executeUpdate();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

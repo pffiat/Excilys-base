@@ -15,7 +15,6 @@ public class LogDAOImpl implements LogDAO {
 
 	public void insert(Log log) {
 		String query = "INSERT INTO log (name, date) VALUES (?, ?);";
-
 		request(query, log);
 	}
 	private void request(String query, Log log) {
@@ -26,6 +25,7 @@ public class LogDAOImpl implements LogDAO {
 			stmt.setString(1, log.getName());
 			stmt.setDate(2, new Date(log.getDate().getTime().getTime()));
 			stmt.executeUpdate();
+			System.out.println("insert log");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

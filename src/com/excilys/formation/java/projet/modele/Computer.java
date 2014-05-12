@@ -84,7 +84,7 @@ public class Computer {
 	}
 	
 	public String toString() {
-		return "NAME OF THE COMPUTER :" + this.name + " introduced : " + introduced + " disc : " + discontinued;
+		return "NAME OF THE COMPUTER :" + this.name + " introduced : " + introduced + " disc : " + discontinued + " id: " + company.getId();
 	}
 	
 }

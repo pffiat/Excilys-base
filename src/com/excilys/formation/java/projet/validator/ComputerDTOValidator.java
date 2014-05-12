@@ -2,54 +2,65 @@ package com.excilys.formation.java.projet.validator;
 
 import com.excilys.formation.java.projet.dto.ComputerDto;
 
+import java.util.Date;
 import java.util.regex.*;
 
-public class ComputerDTOValidator {
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
-	private int codeError;
-	public ComputerDTOValidator() {
-		setCodeError(0);
-	}
-	
-	public int getCodeError() {
-		return codeError;
-	}
+public class ComputerDTOValidator implements Validator{
 
-	private void setCodeError(int codeError) {
-		this.codeError = codeError;
+	@SuppressWarnings("rawtypes")
+	public boolean supports(Class clazz) {
+		return ComputerDto.class.isAssignableFrom(clazz);
 	}
 
-	public int testComputerDTO(ComputerDto dto){
-		ValidatorMessage vm = new ValidatorMessage();
-		testName(dto.getName(), 0);                                               
-		if(testDate(dto.getIntroduced(), 1) & testDate(dto.getDiscontinued(), 2))  
-			testDateBeforeDate(dto.getIntroduced(), dto.getDiscontinued(), 3);        
-		testName(dto.getCompany(), 4);     
-		vm.setCodeError(codeError);
-		return codeError;
-	}
-	
-	private void testDateBeforeDate(String introduced, String discontinued, int i) {
-		boolean valid = true;
-		if(!valid) {
-			setCodeError(getCodeError() + (2^i));
+
+	public void validate(Object target, Errors errors) {
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "name.required");
+		ComputerDto computerDto = (ComputerDto) target;
+
+		if (testDate(computerDto.getIntroduced())) {
+			if (testDate(computerDto.getDiscontinued())) {
+				if( ! testDateBeforeDate(computerDto.getIntroduced(), computerDto.getDiscontinued() )){
+					errors.reject("introduced.after.discontinued");
+				}
+			} else {
+				errors.rejectValue("introducedDate", "not.a.date");
+			}
+		} else {
+			errors.rejectValue("introducedDate", "not.a.date"); 
+			if ( ! testDate(computerDto.getDiscontinued())) {
+				errors.rejectValue("introducedDate", "not.a.date");
+			}			
 		}
 		
+		if (computerDto.getCompany_id() < 0) {
+			errors.rejectValue("companyId", "negativevalue");
+		} 
+		else if (computerDto.getCompany_id() > 43) {
+			errors.rejectValue("companyId", "too.much");
+		}
+
+
+
 	}
-	private boolean testDate(String date, int i) {
-		boolean valid = Pattern.matches("^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$", date);
-		if(!valid) {
-			setCodeError(getCodeError() + (2^i));
+
+	public ComputerDTOValidator() {}
+
+	@SuppressWarnings("deprecation")
+	private boolean testDateBeforeDate(String introduced, String discontinued) {
+		boolean valid = false;
+		if(new Date(introduced).getTime() < new Date(discontinued).getTime()) {
+			valid = true;
 		}
 		return valid;
 	}
-	private void testName(String name, int i) {
-		boolean valid = true;
-		if( name!=null && !("".equals(name))) valid = Pattern.matches("([0-9]|[a-zA-Z]|[-_ ]){2,20}", name);
-		else valid = false;
-		if(!valid) {
-			setCodeError(getCodeError() + (2^i));
-		}
+
+	private boolean testDate(String date) {
+		boolean valid = Pattern.matches("^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$", date);
+		return valid;
 	}
-	
+
 }

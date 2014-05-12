@@ -23,7 +23,7 @@ public class DeleteComputer {
 	@RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(HttpServletRequest request) throws ServletException, IOException {
 		String id = request.getParameter("id");
-		ModelAndView mav = new ModelAndView("dashboard");
+		ModelAndView mav = new ModelAndView("redirect:Dashboard");
 		if(id != null) {
 			int idInt = Integer.parseInt(id);
 			Computer cpt = new Computer(idInt);

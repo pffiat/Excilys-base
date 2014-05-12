@@ -2,6 +2,8 @@ package com.excilys.formation.java.projet.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,6 @@ import com.excilys.formation.java.projet.modele.Company;
 import com.excilys.formation.java.projet.modele.Computer;
 import com.excilys.formation.java.projet.service.CompanyService;
 import com.excilys.formation.java.projet.service.ComputerService;
-import com.excilys.formation.java.projet.validator.ComputerDTOValidator;
 
 @Controller
 @RequestMapping("/AddComputer")
@@ -36,30 +37,26 @@ public class AddComputer {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	protected ModelAndView doPost( @ModelAttribute("computerdto") ComputerDto dto, BindingResult result ){
+	protected ModelAndView doPost(@Valid @ModelAttribute("computerdto") ComputerDto dto, BindingResult result){
 		
-  		ComputerDTOValidator v = new ComputerDTOValidator();
   		ModelAndView mav = null;
-  		int codeError = v.testComputerDTO(dto);
-		if(codeError != 0) {
+		if( ! result.hasErrors() ) {
+			mav = new ModelAndView("redirect:Dashboard");
+
+			System.out.println("id dto:"+dto.getCompany_id()+dto);
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cs.insertComputer(cpn);
-			mav = new ModelAndView("");
+			System.out.println("insertComputer");
 		}else{
 			mav = new ModelAndView("addComputer");
-			mav.addObject("name", dto.getName());
-			mav.addObject("introduced", dto.getIntroduced());
-			mav.addObject("discontinued", dto.getDiscontinued());
-			mav.addObject("company_id", dto.getCompany_id());
+			mav.addObject("dto", dto);
 			CompanyService cp = new CompanyService();
 			List<Company> liste = cp.getAll();
 			mav.addObject("company_name", liste.get(dto.getCompany_id()).getName());
 			liste.remove(dto.getCompany_id());
 			mav.addObject("companies", liste);
-			
+			System.out.println("no insertComputer");			
 		}
 		return mav;
 	}
-	
-
 }

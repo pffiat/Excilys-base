@@ -33,7 +33,7 @@
 			<div class="clearfix">
 				<label for="company">Company Name:</label>
 				<div class="input">
-					<select name="company">
+					<select name="company_id">
 						<option value="0">--</option>
 						<c:forEach var="company" items="${companies}">
 							<option value="${company.id}">${company.name}</option>
