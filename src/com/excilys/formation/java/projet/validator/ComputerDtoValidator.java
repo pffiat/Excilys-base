@@ -9,7 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-public class ComputerDTOValidator implements Validator{
+public class ComputerDtoValidator implements Validator{
 
 	@SuppressWarnings("rawtypes")
 	public boolean supports(Class clazz) {
@@ -47,7 +47,7 @@ public class ComputerDTOValidator implements Validator{
 
 	}
 
-	public ComputerDTOValidator() {}
+	public ComputerDtoValidator() {}
 
 	@SuppressWarnings("deprecation")
 	private boolean testDateBeforeDate(String introduced, String discontinued) {

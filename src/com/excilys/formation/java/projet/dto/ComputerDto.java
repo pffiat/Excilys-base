@@ -3,9 +3,10 @@ package com.excilys.formation.java.projet.dto;
 
 
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class ComputerDto {
 
@@ -14,10 +15,10 @@ public class ComputerDto {
 	@NotEmpty
 	private String name;
 	
-    @DateTimeFormat(pattern="dd-MM-yyyy")
+	@Pattern(regexp = "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
 	private String introduced;
-    
-    @DateTimeFormat(pattern="dd-MM-yyyy")
+
+	@Pattern(regexp = "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
 	private String discontinued;
     
     @Range(min=0)

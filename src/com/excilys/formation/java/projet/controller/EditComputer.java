@@ -35,7 +35,7 @@ public class EditComputer {
     @RequestMapping(method = RequestMethod.GET)
 	protected ModelAndView doGet(HttpServletRequest request) throws ServletException, IOException {
 		
-		ModelAndView mav = new ModelAndView("redirect:EditComputer");
+		ModelAndView mav = new ModelAndView("editComputer");
         ComputerDto cpt = new ComputerDto();
 		List<Company> liste = cs.getAll();
 		String id = request.getParameter("id");
@@ -72,7 +72,7 @@ public class EditComputer {
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cpts.updateComputer(cpn);
 		}else{
-			mav = new ModelAndView("addComputer");
+			mav = new ModelAndView("editComputer");
 			mav.addObject("dto", dto);
 			CompanyService cp = new CompanyService();
 			List<Company> liste = cp.getAll();
