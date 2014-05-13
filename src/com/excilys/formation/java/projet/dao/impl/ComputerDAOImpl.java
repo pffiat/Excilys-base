@@ -164,8 +164,8 @@ public class ComputerDAOImpl implements ComputerDAO{
 					query);
 			if ("update".equals(request)) {
 				stmt.setString(1, comp.getName());
-				stmt.setDate(2, (Date) comp.getIntroduced().getTime());
-				stmt.setDate(3, (Date) comp.getDiscontinued().getTime());
+				stmt.setDate(2, new Date(comp.getIntroduced().getTime().getTime()));
+				stmt.setDate(3, new Date(comp.getDiscontinued().getTime().getTime()));
 				if(comp.getCompany().getId()>0) {
 					stmt.setInt(4, comp.getCompany().getId());
 				} else {

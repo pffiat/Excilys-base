@@ -3,6 +3,7 @@ package com.excilys.formation.java.projet.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,11 @@ public class Dashboard {
 		pageWrapper.setTotalCount(cs.getNumberWithCriteria(search));
 
 		List<ComputerDto> comp = null;
-		comp = ComputerMapper.toDTOList(cs.getCriteria(search, pageWrapper.getSort(), (pageWrapper.getCurrentPage() * pageWrapper.getPageLimit() - pageWrapper.getPageLimit()), pageWrapper.getPageLimit()));
+		comp = ComputerMapper.toDTOList(cs.getCriteria(
+				search, 
+				pageWrapper.getSort(), 
+				pageWrapper.getCurrentPage() * pageWrapper.getPageLimit() - pageWrapper.getPageLimit(), 
+				pageWrapper.getPageLimit()));
 		pageWrapper.setList(comp);
 		pageWrapper.setAttribute();
 		mav.addObject("pageWrapper", pageWrapper);

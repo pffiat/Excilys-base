@@ -43,11 +43,8 @@ public class AddComputer {
 
 		if( ! result.hasErrors() ) {
 			mav = new ModelAndView("redirect:Dashboard");
-
-			System.out.println("id dto:"+dto.getCompany_id()+dto);
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cs.insertComputer(cpn);
-			System.out.println("insertComputer");
 		}else{
 			mav = new ModelAndView("addComputer");
 			mav.addObject("dto", dto);
