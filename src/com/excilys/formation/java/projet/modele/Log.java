@@ -1,12 +1,13 @@
 package com.excilys.formation.java.projet.modele;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
+
 
 public class Log {
 
 	private int id;
 	private String name;
-	private Calendar date;
+	private DateTime date;
 	
 	public Log() {
 		this.id = 0;
@@ -27,7 +28,7 @@ public class Log {
 		this.name = name;
 	}
 	
-	public Log(int id, String name, Calendar date) {
+	public Log(int id, String name, DateTime date) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
@@ -41,8 +42,7 @@ public class Log {
 		return name;
 	}
 
-	public Calendar getDate() {
-		if(date == null ) return Calendar.getInstance();
+	public DateTime getDate() {
 		return date;
 	}
 
@@ -54,7 +54,7 @@ public class Log {
 		this.name = name;
 	}
 
-	public void setDate(Calendar date) {
+	public void setDate(DateTime date) {
 		this.date = date;
 	}
 	

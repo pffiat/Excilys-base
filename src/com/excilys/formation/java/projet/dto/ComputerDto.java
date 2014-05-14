@@ -8,20 +8,22 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
+import com.excilys.formation.java.projet.modele.Computer;
+
 public class ComputerDto {
 
 	private int id = 0;
-	
+
 	@NotEmpty
 	private String name;
-	
-	@Pattern(regexp = "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+
+	@Pattern(regexp = "^|(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
 	private String introduced;
 
-	@Pattern(regexp = "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+	@Pattern(regexp = "^|(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
 	private String discontinued;
-    
-    @Range(min=0)
+
+	@Range(min=0)
 	private int company_id = 0;
 	private String company;
 
@@ -101,6 +103,21 @@ public class ComputerDto {
 		this.setDiscontinued(b.getDiscontinued());
 		this.setCompany_id(b.getCompany_id());
 		this.setCompany(b.getCompany());
+	}
+
+	public ComputerDto(Computer cpn) {
+		super();
+		this.id = cpn.getId();
+		this.name = cpn.getName();
+		if(cpn.getIntroduced() != null){
+			this.introduced = cpn.getIntroduced().toString();
+		}
+		if(cpn.getDiscontinued() != null) {
+			this.discontinued = cpn.getDiscontinued().toString();			
+		}
+		this.company_id = cpn.getCompany().getId();
+		this.company = cpn.getCompany().getName();
+
 	}
 
 	public static class Builder {

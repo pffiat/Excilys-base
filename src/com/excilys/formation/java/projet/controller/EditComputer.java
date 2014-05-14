@@ -74,8 +74,7 @@ public class EditComputer {
 		}else{
 			mav = new ModelAndView("editComputer");
 			mav.addObject("dto", dto);
-			CompanyService cp = new CompanyService();
-			List<Company> liste = cp.getAll();
+			List<Company> liste = cs.getAll();
 			mav.addObject("company_name", liste.get(dto.getCompany_id()).getName());
 			liste.remove(dto.getCompany_id());
 			mav.addObject("companies", liste);

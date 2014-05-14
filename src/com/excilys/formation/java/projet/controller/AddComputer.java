@@ -45,11 +45,12 @@ public class AddComputer {
 			mav = new ModelAndView("redirect:Dashboard");
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cs.insertComputer(cpn);
+			System.out.println("dashboard");
 		}else{
+			System.out.println("addComputer");
 			mav = new ModelAndView("addComputer");
 			mav.addObject("dto", dto);
-			CompanyService cp = new CompanyService();
-			List<Company> liste = cp.getAll();
+			List<Company> liste = cpts.getAll();
 			mav.addObject("company_name", liste.get(dto.getCompany_id()).getName());
 			liste.remove(dto.getCompany_id());
 			mav.addObject("companies", liste);

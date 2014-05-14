@@ -15,6 +15,7 @@ public class PageWrapper {
 	private ComputerService cs;
 	
 	private List<ComputerDto> list;
+	private String language = "en";
 	private int totalCount;
 	private int currentPage = 1;
 	private int pageLimit = 20;
@@ -47,9 +48,7 @@ public class PageWrapper {
 	}
 
 	public void setList(List<ComputerDto> list) {
-		this.list = list;
-		System.out.println("list pageWrapper beginning: "+this.list.get(0));
-		
+		this.list = list;		
 	}
 
 	public void setTotalCount(int totalCount) {
@@ -83,12 +82,10 @@ public class PageWrapper {
 
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
-		System.out.println("pageLimit :" + pageLimit );
 		String currentLigne = request.getParameter("lignes");
 		if (currentLigne != null) {
 			pageLimit = Integer.parseInt(currentLigne);
 			pageLimit = pageLimit * 5;
-			System.out.println("pageLimit currentLigne:" + pageLimit +" " + currentLigne);
 		}
 		String currentPageString = request.getParameter("page");
 		if (currentPageString != null) {
@@ -99,8 +96,12 @@ public class PageWrapper {
 		if (currentPageString != null || currentLigne != null) {
 			search = previousSearch;
 		}
+		String languageCurrent = request.getParameter("language");
+		if (languageCurrent != null && !("".equals(languageCurrent))) {
+			language = languageCurrent;
+			System.out.println("\npar ici \n");
+		}
 		previousSearch = search;
-		System.out.println("\nsearch: "+search);
 		setSearch(search);
 		
 	}
@@ -129,11 +130,23 @@ public class PageWrapper {
 		this.search = search;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	private void initializeList(String search){
 		if (totalCount != 0) {
-			sort.setColumn(request.getParameter("column"));
+			if(request.getParameter("column")!=null){
+				sort.setColumn(new Integer(request.getParameter("column")));
+			} else {
+				sort.setColumn(1);
+			}
 			sort.setOrder(request.getParameter("order"));
-			System.out.println("currentPage * pageLimit - pageLimit ||| pageLimit: " + (currentPage * pageLimit - pageLimit) + " ||| " + pageLimit);
+			System.out.println("sort : " + sort.getColumn()+sort.getOrder());
 		}
 		
 	}

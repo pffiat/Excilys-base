@@ -67,7 +67,6 @@ public class ComputerService {
 		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
 		logdao.insert(new Log("get computers with criteria:" + criteria));
 		ConnectionManager.deconnection();
-		System.out.println("list beginning: "+comp.get(0));
 		return comp;
 	}
 

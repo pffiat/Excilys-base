@@ -1,6 +1,5 @@
 package com.excilys.formation.java.projet.dao.impl;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.java.projet.common.Sort;
-import com.excilys.formation.java.projet.mapper.ComputerMapper;
 import com.excilys.formation.java.projet.modele.*;
 import com.excilys.formation.java.projet.dao.*;
 
 import java.sql.Connection;
 
+import org.joda.time.DateTime;
 import org.springframework.asm.Type;
 import org.springframework.stereotype.Repository;
 
@@ -46,6 +45,11 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 	public List<Computer> getCriteria(String search, Sort sort, int offset, int scope) {
 
+		if(sort == null){
+			sort = new Sort();
+			sort.setColumn(1);
+			sort.setOrder("ASC");
+		}
 		List<Computer> liste = new ArrayList<Computer>();
 		Connection conn = ConnectionManager.getConnectionThLocal();
 		PreparedStatement stmt = null;
@@ -54,50 +58,38 @@ public class ComputerDAOImpl implements ComputerDAO{
 		query.append("SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id");
 		try {
 			if(search != null && !("".equals(search))) {
-				query.append(" WHERE computer.name LIKE ? OR company.name LIKE ?");
-				if(sort.needOrder()) { query.append(" ORDER BY ? ?"); }
-				query.append(" LIMIT ?,?") ;
+				query.append(" WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ") ;
+				query.append(sort.toString());
+				query.append(" LIMIT ?,?");
 				stmt = conn.prepareStatement(query.toString());
 				stmt.setString(1, "%"+search+"%");
 				stmt.setString(2, "%"+search+"%");
-				if(sort.needOrder()){
-					stmt.setString(3, sort.getColumn());
-					stmt.setString(4, sort.getColumn());
-					stmt.setInt(5, offset);
-					stmt.setInt(6, scope);
-				} else {
-
-					stmt.setInt(3, offset);
-					stmt.setInt(4, scope);
-				}
+				stmt.setInt(3, offset);
+				stmt.setInt(4, scope);
 			}
 			else{
-				if(sort.needOrder()) { query.append(" ORDER BY ? ?"); }
-				query.append(" LIMIT ?,?") ;
+				query.append(" ORDER BY ") ;
+				query.append(sort.toString());
+				query.append(" LIMIT ?,?");
 				stmt = conn.prepareStatement(query.toString());
-				if(sort.needOrder()){
-					stmt.setString(1, sort.getColumn());
-					stmt.setString(2, sort.getColumn());
-					stmt.setInt(3, offset);
-					stmt.setInt(4, scope);
-				} else {
-
-					stmt.setInt(1, offset);
-					stmt.setInt(2, scope);
-				}
+				stmt.setInt(1, offset);
+				stmt.setInt(2, scope);
 			}
+			System.out.println(stmt.toString());
 			results = stmt.executeQuery();
 			while(results.next()) {
 				if (results != null)
 					try {
 						Computer cp = new Computer();
-						
+
 						cp.setId(new Integer(results.getInt(1)));
 						cp.setName(results.getString(2));
-						cp.setIntroduced(ComputerMapper.stringToCalendar(results
-								.getString(3)));
-						cp.setDiscontinued(ComputerMapper.stringToCalendar(results
-								.getString(4)));
+						if(results.getString(3) != null) {
+							cp.setIntroduced(new DateTime(results.getString(3).substring(0,10)));
+						}
+						if(results.getString(4) != null){
+							cp.setDiscontinued(new DateTime(results.getString(4).substring(0,10)));
+						}
 
 						Company comp = new Company();
 
@@ -164,8 +156,16 @@ public class ComputerDAOImpl implements ComputerDAO{
 					query);
 			if ("update".equals(request)) {
 				stmt.setString(1, comp.getName());
-				stmt.setDate(2, new Date(comp.getIntroduced().getTime().getTime()));
-				stmt.setDate(3, new Date(comp.getDiscontinued().getTime().getTime()));
+				if(comp.getIntroduced()!=null){
+					stmt.setString(2, comp.getIntroduced().toString());
+				} else {
+					stmt.setString(2, null);
+				}
+				if(comp.getDiscontinued()!=null){
+					stmt.setString(3, comp.getDiscontinued().toString());
+				} else {
+					stmt.setString(3, null);
+				}
 				if(comp.getCompany().getId()>0) {
 					stmt.setInt(4, comp.getCompany().getId());
 				} else {
@@ -180,8 +180,16 @@ public class ComputerDAOImpl implements ComputerDAO{
 			}
 			if ("insert".equals(request)) {
 				stmt.setString(1, comp.getName());
-				stmt.setDate(2, new Date(comp.getIntroduced().getTime().getTime()));
-				stmt.setDate(3, new Date(comp.getDiscontinued().getTime().getTime()));
+				if(comp.getIntroduced()!=null){
+					stmt.setString(2, comp.getIntroduced().toString());
+				} else {
+					stmt.setString(2, null);
+				}
+				if(comp.getDiscontinued()!=null){
+					stmt.setString(3, comp.getDiscontinued().toString());
+				} else {
+					stmt.setString(3, null);
+				}
 				if(comp.getCompany().getId()>0) {
 					stmt.setInt(4, comp.getCompany().getId());
 				} else {
@@ -212,10 +220,8 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 				cp.setId(new Integer(results.getInt(1)));
 				cp.setName(results.getString(2));
-				cp.setIntroduced(ComputerMapper.stringToCalendar(results
-						.getString(3)));
-				cp.setDiscontinued(ComputerMapper.stringToCalendar(results
-						.getString(4)));
+				cp.setIntroduced(new DateTime(results.getString(3)));
+				cp.setDiscontinued(new DateTime(results.getString(4)));
 
 				Company comp = new Company();
 
