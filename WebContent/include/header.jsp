@@ -19,8 +19,8 @@
         	    <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Application Computer Database</a>
-          <a class="navbar-brand" href="Dashboard?language=fr">fr |</a>
-          <a class="navbar-brand" href="Dashboard?search=${pageWrapper.search}&lignes=${pageWrapper.nbOfLines}&column=${pageWrapper.sort.column}&order=${pageWrapper.sort.order}&language=en">en</a>
+          <a class="navbar-brand" href="?language=fr">fr |</a>
+          <a class="navbar-brand" href="?search=${pageWrapper.search}&lignes=${pageWrapper.nbOfLines}&column=${pageWrapper.sort.column}&order=${pageWrapper.sort.order}&language=en">en</a>
 	</header>
 	</body>
       

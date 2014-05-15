@@ -31,7 +31,7 @@
 				<div class="input">
 		<%-- 			<input type="date" name="discontinued" value="${computer.discontinued}"/> <span
 						class="help-inline">YYYY-MM-DD</span> --%>
-						<input class="has-help-txt error" data-validation-optional="true" data-validation-help="<spring:message code="ymdLong" text="" />yyyy-mm-dd (Not allowing dates in the future or older than 120 years)" data-validation="birthdate" name="discontinued" value="${computer.discontinued}"></input>
+						<input class="has-help-txt error" data-validation-optional="true" data-validation-help="<spring:message code="ymdLong" text="" />" data-validation="birthdate" name="discontinued" value="${computer.discontinued}"></input>
 				</div>
 			</div>
 			<div class="clearfix">

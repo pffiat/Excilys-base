@@ -46,8 +46,8 @@ public class AddComputer {
 			Computer cpn = ComputerMapper.fromDTO(dto);
 			cs.insertComputer(cpn);
 			System.out.println("dashboard");
-		}else{
-			System.out.println("addComputer");
+		} else {
+			System.out.println(result.getAllErrors());
 			mav = new ModelAndView("addComputer");
 			mav.addObject("dto", dto);
 			List<Company> liste = cpts.getAll();
