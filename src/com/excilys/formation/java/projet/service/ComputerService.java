@@ -4,14 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.java.projet.common.Sort;
-import com.excilys.formation.java.projet.dao.*;
 import com.excilys.formation.java.projet.dao.impl.ComputerDAOImpl;
 import com.excilys.formation.java.projet.dao.impl.LogDAOImpl;
-import com.excilys.formation.java.projet.modele.*;
+import com.excilys.formation.java.projet.modele.*; 
 
 @Service("computerService")
+@Transactional
 public class ComputerService {
 
 	@Autowired
@@ -24,59 +25,57 @@ public class ComputerService {
 		cpt = comp;
 	}
 
+	@Transactional
 	public void insertComputer(Computer comp) {
-		ConnectionManager.connection();
+		/*
+		 * first getConnection() to initialize the connection to the datasource 
+		 * the other calls of getConnection() will get the same connection
+		 */
 		this.cptdao.insert(comp);
 		this.logdao.insert(new Log("insert computer with id=" + comp.getId()));
-		ConnectionManager.deconnection();
 	}
 
+	@Transactional
 	public void updateComputer(Computer comp) {
-		ConnectionManager.connection();
 		this.setComputer(comp);
 		this.cptdao.update(cpt);
 		this.logdao.insert(new Log("update computer with id=" + comp.getId()));
-		ConnectionManager.deconnection();
 	}
 
+	@Transactional
 	public void deleteComputer(Computer comp) {
-		ConnectionManager.connection();
 		this.setComputer(comp);
 		this.cptdao.delete(comp);
 		this.logdao.insert(new Log("delete computer with id=" + comp.getId()));
-		ConnectionManager.deconnection();
 
 	}
 
+	@Transactional
 	public String toString() {
 		return "ComputerService toString";
 	}
 
+	@Transactional
 	public List<Computer> getAll() {
 		List<Computer> comp = null;
-		ConnectionManager.connection();
 		comp = cptdao.getAll();
 		this.logdao.insert(new Log("get all computers"));
-		ConnectionManager.deconnection();
 		return comp;
 	}
 
+	@Transactional
 	public List<Computer> getCriteria(String criteria, Sort sort, int i, int pageLimit) {
 		List<Computer> comp = null;
-		ConnectionManager.connection();
 		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
 		logdao.insert(new Log("get computers with criteria:" + criteria));
-		ConnectionManager.deconnection();
 		return comp;
 	}
 
+	@Transactional
 	public int getNumberWithCriteria(String criteria) {
 		int count = 0;
-		ConnectionManager.connection();
 		count = cptdao.getNumberWithCriteria(criteria);
-		logdao.insert(new Log("select count with criteria:" + criteria));
-		ConnectionManager.deconnection();
-		
+		logdao.insert(new Log("select count with criteria:" + criteria));		
 		return count;
 	}
 }

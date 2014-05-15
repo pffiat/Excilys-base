@@ -9,16 +9,21 @@ import java.util.List;
 import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.modele.*;
 import com.excilys.formation.java.projet.dao.*;
+import com.jolbox.bonecp.BoneCPDataSource;
 
 import java.sql.Connection;
 
 import org.joda.time.DateTime;
 import org.springframework.asm.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository("computerDao")
 public class ComputerDAOImpl implements ComputerDAO{
 
+	@Autowired
+	BoneCPDataSource ds;
 
 	public void insert(Computer comp) {
 		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) "
@@ -51,7 +56,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 			sort.setOrder("ASC");
 		}
 		List<Computer> liste = new ArrayList<Computer>();
-		Connection conn = ConnectionManager.getConnectionThLocal();
+		Connection conn = DataSourceUtils.getConnection(ds);
 		PreparedStatement stmt = null;
 		ResultSet results = null;
 		StringBuilder query = new StringBuilder(80);
@@ -114,7 +119,7 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 	public int getNumberWithCriteria(String search) {
 
-		Connection conn = ConnectionManager.getConnectionThLocal();
+		Connection conn = DataSourceUtils.getConnection(ds);
 		PreparedStatement stmt = null;
 		ResultSet results = null;
 		int resultInt = 0;
@@ -151,8 +156,9 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 		PreparedStatement stmt = null;
 		System.out.println(query);
+		Connection conn = DataSourceUtils.getConnection(ds);
 		try {
-			stmt = ConnectionManager.getConnectionThLocal().prepareStatement(
+			stmt = conn.prepareStatement(
 					query);
 			if ("update".equals(request)) {
 				stmt.setString(1, comp.getName());
@@ -208,9 +214,9 @@ public class ComputerDAOImpl implements ComputerDAO{
 	private List<Computer> select(String query) {
 
 		List<Computer> liste = new ArrayList<Computer>();
-		Connection conn = ConnectionManager.getConnectionThLocal();
 		PreparedStatement prep = null;
 		ResultSet results = null;
+		Connection conn = DataSourceUtils.getConnection(ds);
 		try {
 			prep = conn.prepareStatement(query);
 

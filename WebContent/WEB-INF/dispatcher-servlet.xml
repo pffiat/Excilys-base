@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-
-	xsi:schemaLocation="         
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="  
+	  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd     
 		http://www.springframework.org/schema/beans              
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd         
 		http://www.springframework.org/schema/mvc          
@@ -12,10 +12,10 @@
 		http://www.springframework.org/schema/context/spring-context-4.0.xsd         
 		">
 	<context:annotation-config />
-	
+
 	<context:component-scan base-package="com.excilys.formation.java.projet.controller" />
-	 
-	
+
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -25,30 +25,54 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-	
-	<bean id="messageSource"    
-        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">    
-    <!-- <property name="basename" value="message"/>    -->      
-    	 <property name="basenames"              value="classpath:message"/>
-         <property name="cacheSeconds"           value="60"/>
-         <property name="fallbackToSystemLocale" value="false" />    
-  </bean>  
-  
-  <mvc:interceptors>
-  <bean id="localeChangeInterceptor"
-		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-		<property name="paramName" value="language" />
-		
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames" value="classpath:message" />
+		<property name="cacheSeconds" value="60" />
+		<property name="fallbackToSystemLocale" value="false" />
 	</bean>
-	
- </mvc:interceptors>
-  
- <bean id="localeResolver"
+
+	<mvc:interceptors>
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="language" />
+
+		</bean>
+
+	</mvc:interceptors>
+
+
+	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="en" />
 	</bean>
+
+
+
+	<tx:annotation-driven/>
 	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+	
+	<bean id="dataSource"
+		class="com.jolbox.bonecp.BoneCPDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="maxConnectionsPerPartition" value="10" />
+		<property name="minConnectionsPerPartition" value="5" />
+		<property name="partitionCount" value="2" />
+		<property name="defaultAutoCommit" value="false" />
+
+	</bean>
+
 	<mvc:annotation-driven></mvc:annotation-driven>
-	<mvc:resources location="/css/" mapping="/css/**"/>
-	
-	</beans>
+	<mvc:resources location="/css/" mapping="/css/**" />
+
+
+
+</beans>

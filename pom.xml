@@ -34,36 +34,48 @@
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
+	
+	<!-- All the different version of the dependencies -->
 
 	<properties>
 		<slf4j.version>1.7.6</slf4j.version>
 		<logback.version>1.1.1</logback.version>
+		<springVersion>4.0.4.RELEASE</springVersion>
+		<jodaTimeVersion>2.3</jodaTimeVersion>
+		<jolboxVersion>0.8.0.RELEASE</jolboxVersion>
+		<guavaVersion>17.0</guavaVersion>
+		<jstlVersion>1.2</jstlVersion>
+		<javaxServletVersion>3.0.1</javaxServletVersion>
+		<mysqlVersion>5.1.30</mysqlVersion>
+		<hibernateVersion>5.1.1.Final</hibernateVersion>
+		<validatorVersion>1.1.0.Final</validatorVersion>
 	</properties>
-	
-	
+
+
+
 	<dependencies>
 		<dependency>
 			<groupId>	com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
-			<version>0.7.1.RELEASE</version>
+			<version>${jolboxVersion}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>	com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<version>${guavaVersion}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId> javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstlVersion}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId> javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>${javaxServletVersion}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -94,12 +106,25 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.30</version>
+			<version>${mysqlVersion}</version>
 		</dependency>
+		
+		<!-- Springframework -->
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>4.0.3.RELEASE</version>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${springVersion}</version>
 		</dependency>
 
 
@@ -107,19 +132,19 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.1.1.Final</version>
+			<version>${hibernateVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
+			<version>${validatorVersion}</version>
 		</dependency>
 
 
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
+			<version>${jodaTimeVersion}</version>
 		</dependency>
 
 	</dependencies>

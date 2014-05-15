@@ -1,27 +1,33 @@
 package com.excilys.formation.java.projet.dao.impl;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.java.projet.dao.*;
 import com.excilys.formation.java.projet.modele.*;
-
+import com.jolbox.bonecp.BoneCPDataSource;
 @Repository("companyDao")
 public class CompanyDAOImpl implements CompanyDAO {
 
+	@Autowired
+	BoneCPDataSource ds;
 
 	public List<Company> getAll() {	
 		
 		List<Company> liste = new ArrayList<Company>();
 		PreparedStatement stmt = null;
 		ResultSet results = null;
+		Connection conn = DataSourceUtils.getConnection(ds);
 		try {
-			stmt = ConnectionManager.getConnectionThLocal().prepareStatement("SELECT * FROM company");			
+			stmt = conn.prepareStatement("SELECT * FROM company");			
 			results = stmt.executeQuery();
 			while (results.next()) {
 				Company cp = new Company();
@@ -31,6 +37,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			ConnectionManager.closeResultSet(results);
+			ConnectionManager.closeStatement(stmt);
 		}
 		return liste;
 	}
