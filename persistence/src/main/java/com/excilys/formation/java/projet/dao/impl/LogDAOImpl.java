@@ -1,11 +1,7 @@
 package com.excilys.formation.java.projet.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.java.projet.modele.Log;
@@ -15,9 +11,12 @@ import com.jolbox.bonecp.BoneCPDataSource;
 @Repository("logDao")
 public class LogDAOImpl implements LogDAO {
 
-	@Autowired
-	BoneCPDataSource ds;
+	private JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	public void init(BoneCPDataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
 
 	public void insert(Log log) {
 		String query = "INSERT INTO log (name, date) VALUES (?, ?);";
@@ -26,23 +25,13 @@ public class LogDAOImpl implements LogDAO {
 	
 	private void request(String query, Log log) {
 
-		PreparedStatement stmt = null;
-		Connection conn = DataSourceUtils.getConnection(ds);
-		try {
-			stmt = conn.prepareStatement(query);
-			stmt.setString(1, log.getName());
+			String date;
 			if(log.getDate()!=null){
-				stmt.setString(2, log.getDate().toString());
+				date = log.getDate().toString();
 			} else {
-				stmt.setString(2, null);
+				date = null;
 			}
-			stmt.executeUpdate();
-			System.out.println("insert log");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			ConnectionManager.closeStatement(stmt);
-		}
+			this.jdbcTemplate.update(query, log.getName(), date);
 
 	}
 }
