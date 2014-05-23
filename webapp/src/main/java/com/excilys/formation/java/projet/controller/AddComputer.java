@@ -23,39 +23,42 @@ import com.excilys.formation.java.projet.service.ComputerService;
 @RequestMapping("/AddComputer")
 public class AddComputer {
 
-    @Autowired
-    private CompanyService cpts;
-    @Autowired
-    private ComputerService cs;
+	@Autowired
+	private CompanyService cpts;
+	@Autowired
+	private ComputerService cs;
 
-@RequestMapping(method = RequestMethod.GET)
-protected ModelAndView doGet() {
-ModelAndView mav = new ModelAndView("addComputer");
-List<Company> liste = cpts.getAll();
-mav.addObject("companies", liste);
-return mav;
-}
+	@RequestMapping(method = RequestMethod.GET)
+	protected ModelAndView doGet() {
+		ModelAndView mav = new ModelAndView("addComputer");
+		List<Company> liste = cpts.getAll();
+		mav.addObject("companies", liste);
+		return mav;
+	}
 
-@RequestMapping(method = RequestMethod.POST)
-protected ModelAndView doPost(@Valid @ModelAttribute("computerdto") ComputerDto dto, BindingResult result){
+	@RequestMapping(method = RequestMethod.POST)
+	protected ModelAndView doPost(
+			@Valid @ModelAttribute("computerdto") ComputerDto dto,
+			BindingResult result) {
 
-   ModelAndView mav = null;
+		ModelAndView mav = null;
 
-if( ! result.hasErrors() ) {
-mav = new ModelAndView("redirect:Dashboard");
-Computer cpn = ComputerMapper.fromDTO(dto);
-cs.insertComputer(cpn);
-System.out.println("dashboard");
-} else {
-System.out.println(result.getAllErrors());
-mav = new ModelAndView("addComputer");
-mav.addObject("dto", dto);
-List<Company> liste = cpts.getAll();
-mav.addObject("company_name", liste.get(dto.getCompany_id()).getName());
-liste.remove(dto.getCompany_id());
-mav.addObject("companies", liste);
-System.out.println("no insertComputer");	
-}
-return mav;
-}
+		if (!result.hasErrors()) {
+			mav = new ModelAndView("redirect:Dashboard");
+			Computer cpn = ComputerMapper.fromDTO(dto);
+			cs.insertComputer(cpn);
+			System.out.println("dashboard");
+		} else {
+			System.out.println(result.getAllErrors());
+			mav = new ModelAndView("addComputer");
+			mav.addObject("dto", dto);
+			List<Company> liste = cpts.getAll();
+			mav.addObject("company_name", liste.get(dto.getCompany_id())
+					.getName());
+			liste.remove(dto.getCompany_id());
+			mav.addObject("companies", liste);
+			System.out.println("no insertComputer");
+		}
+		return mav;
+	}
 }
