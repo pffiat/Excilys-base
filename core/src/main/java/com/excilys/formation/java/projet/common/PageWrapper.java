@@ -133,9 +133,9 @@ public class PageWrapper {
 	private void initializeList(String search){
 		if (totalCount != 0) {
 			if(request.getParameter("column")!=null){
-				sort.setColumn(new Integer(request.getParameter("column")));
+				sort.setColumn(request.getParameter("column"));
 			} else {
-				sort.setColumn(1);
+				sort.setColumn("name");
 			}
 			sort.setOrder(request.getParameter("order"));
 			System.out.println("sort : " + sort.getColumn()+sort.getOrder());

@@ -14,22 +14,23 @@
 	</properties>
 
 	<dependencies>
-		<!--  pom  -->
+		<!-- pom -->
 		<dependency>
 			<groupId>com.excilys</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
 
 
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-			</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
 
 		<!-- bonecp -->
 		<dependency>
-			<groupId>	com.jolbox</groupId>
+			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<scope>compile</scope>
 		</dependency>
@@ -43,11 +44,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
+			<artifactId>spring-jdbc</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
+			<artifactId>spring-orm</artifactId>
 		</dependency>
 	</dependencies>
 </project>

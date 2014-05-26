@@ -115,8 +115,10 @@ public class ComputerDto {
 		if(cpn.getDiscontinued() != null) {
 			this.discontinued = cpn.getDiscontinued().toString();			
 		}
-		this.company_id = cpn.getCompany().getId();
-		this.company = cpn.getCompany().getName();
+		if( cpn.getCompany() != null) {
+			this.company_id = cpn.getCompany().getId();
+			this.company = cpn.getCompany().getName();
+		}
 
 	}
 

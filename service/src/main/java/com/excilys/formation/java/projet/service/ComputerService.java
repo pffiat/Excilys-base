@@ -7,55 +7,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.java.projet.common.Sort;
-import com.excilys.formation.java.projet.dao.impl.ComputerDAOImpl;
-import com.excilys.formation.java.projet.dao.impl.LogDAOImpl;
-import com.excilys.formation.java.projet.modele.*; 
+import com.excilys.formation.java.projet.dao.*;
+import com.excilys.formation.java.projet.modele.Computer;
+import com.excilys.formation.java.projet.modele.Log;
 
 @Service("computerService")
 @Transactional
 public class ComputerService {
 
 	@Autowired
-	private ComputerDAOImpl cptdao;
+	private ComputerDAO cptdao;
 	@Autowired
-	private LogDAOImpl logdao;
-	private Computer cpt = new Computer();
+	private LogDAO logdao;
 
-	private void setComputer(Computer comp) {
-		cpt = comp;
-	}
 
-	@Transactional
 	public void insertComputer(Computer comp) {
-		/*
-		 * first getConnection() to initialize the connection to the datasource 
-		 * the other calls of getConnection() will get the same connection
-		 */
 		this.cptdao.insert(comp);
 		this.logdao.insert(new Log("insert computer with id=" + comp.getId()));
 	}
 
-	@Transactional
 	public void updateComputer(Computer comp) {
-		this.setComputer(comp);
-		this.cptdao.update(cpt);
+		this.cptdao.update(comp);
 		this.logdao.insert(new Log("update computer with id=" + comp.getId()));
 	}
 
-	@Transactional
 	public void deleteComputer(Computer comp) {
-		this.setComputer(comp);
 		this.cptdao.delete(comp);
 		this.logdao.insert(new Log("delete computer with id=" + comp.getId()));
 
 	}
 
-	@Transactional
 	public String toString() {
 		return "ComputerService toString";
 	}
 
-	@Transactional
 	public List<Computer> getAll() {
 		List<Computer> comp = null;
 		comp = cptdao.getAll();
@@ -63,7 +48,6 @@ public class ComputerService {
 		return comp;
 	}
 
-	@Transactional
 	public List<Computer> getCriteria(String criteria, Sort sort, int i, int pageLimit) {
 		List<Computer> comp = null;
 		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
@@ -71,7 +55,6 @@ public class ComputerService {
 		return comp;
 	}
 
-	@Transactional
 	public int getNumberWithCriteria(String criteria) {
 		int count = 0;
 		count = cptdao.getNumberWithCriteria(criteria);

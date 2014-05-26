@@ -1,8 +1,16 @@
 package com.excilys.formation.java.projet.modele;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="company") 
 public class Company {
 
-	private int id = 0;
+	@Id
+	@GeneratedValue
+	@Column(name="id")
+	private int id;
+	@Column(name="name")
 	private String name = "";
 	
 	

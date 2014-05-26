@@ -13,9 +13,9 @@
 			</div>
 			<div class="col-md-1">
 					<select name="column">
-						<option value="2"><spring:message code="name.of.company" text="" /></option>
-						<option value="3"><spring:message code="date.of.introduced"  text=""/></option>
-						<option value="6"><spring:message code="name.of.computer"  text=""/></option>
+						<option value="name"><spring:message code="name.of.company" text="" /></option>
+						<option value="introduced"><spring:message code="date.of.introduced"  text=""/></option>
+						<option value="company.name"><spring:message code="name.of.computer"  text=""/></option>
 					</select>
 			</div>
 			<div class="col-md-1">

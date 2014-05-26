@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.formation.java.projet.dao.impl.CompanyDAOImpl;
-import com.excilys.formation.java.projet.dao.impl.LogDAOImpl;
+import com.excilys.formation.java.projet.dao.*;
 import com.excilys.formation.java.projet.modele.*;
 
 @Service("companyService")
@@ -15,15 +14,9 @@ import com.excilys.formation.java.projet.modele.*;
 public class CompanyService {
 
 	@Autowired
-	private CompanyDAOImpl cptdao;
+	private CompanyDAO cptdao;
 	@Autowired
-	private LogDAOImpl logdao;
-
-	public CompanyService() {
-	}
-	public String toString() {
-		return "CompanyService toString";
-	}
+	private LogDAO logdao;
 
 	@Transactional
 	public List<Company> getAll() {

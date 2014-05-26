@@ -1,25 +1,26 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.excilys</groupId>
-    <artifactId>computer-database</artifactId>
-    <version>2.2.0-RELEASE</version>
-  </parent>
-  <artifactId>core</artifactId>
-  <name>core</name>
-  <packaging>jar</packaging>
-  
-  
-	
-	
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.excilys</groupId>
+		<artifactId>computer-database</artifactId>
+		<version>2.2.0-RELEASE</version>
+	</parent>
+	<artifactId>core</artifactId>
+	<name>core</name>
+	<packaging>jar</packaging>
+
+
+
+
 	<dependencies>
-	
+
 		<dependency>
 			<groupId> javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
-	
-	
+
+
 		<!-- Validator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -31,16 +32,27 @@
 			<artifactId>validation-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- joda time -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<scope>compile</scope>
 		</dependency>
-	
+
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+		</dependency>
+
+
 	</dependencies>
-	
-	
-  
+
+
+
 </project>

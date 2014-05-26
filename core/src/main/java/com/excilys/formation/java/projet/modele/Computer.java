@@ -1,15 +1,25 @@
 package com.excilys.formation.java.projet.modele;
 
+import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.excilys.formation.java.projet.dto.ComputerDto;
 
+@Entity
+@Table(name="computer") 
 public class Computer {
 
+	@Id 
+	@GeneratedValue
 	private int id;
 	private String name;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime introduced;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime discontinued;
+	@ManyToOne(cascade = {CascadeType.ALL}) @JoinColumn(name="company_id")
 	private Company company;
 
 

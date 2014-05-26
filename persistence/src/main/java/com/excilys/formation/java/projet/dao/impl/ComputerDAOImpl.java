@@ -1,159 +1,103 @@
 package com.excilys.formation.java.projet.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.modele.*;
 import com.excilys.formation.java.projet.dao.*;
-import com.jolbox.bonecp.BoneCPDataSource;
 
-import org.joda.time.DateTime;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository("computerDao")
 public class ComputerDAOImpl implements ComputerDAO{
-	
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public void init(BoneCPDataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	SessionFactory sessionFactory;
+
+	
+	public List<Computer> getAll() {	
+
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Computer LEFT OUTER JOIN Company");
+		List<Computer> list = new ArrayList<Computer>();
+		for(final Object o : query.list()) {
+			list.add((Computer)o);
+		}		
+		return list;
 	}
 
-
 	public void insert(Computer comp) {
-		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) "
-				+ "VALUES (?,?,?,?); ";
-		System.out.println(comp);
-		List<String> list = new ArrayList<String>();
-		list.add(comp.getName());
-		if(comp.getIntroduced()!=null){
-			list.add(comp.getIntroduced().toString());
-		} else {
-			list.add(null);
-		} 
-		if(comp.getDiscontinued()!=null){
-			list.add(comp.getDiscontinued().toString());
-		} else {
-			list.add(null);
-		}
-		Integer id;
-		if(comp.getCompany().getId()>0) {
-			id = comp.getCompany().getId();
-		} else {
-			id = (Integer) null;
-		}
-		this.jdbcTemplate.update(query, list.toArray() , id);
+
+		Session session = sessionFactory.getCurrentSession();
+		session.persist(comp);
 	}
 
 	public void delete(Computer comp) {
 
-		String query = "DELETE FROM computer WHERE id= ?";
-		this.jdbcTemplate.update(query, comp.getId());
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(comp);
 	}
 
 	public void update(Computer comp) {
-		String query = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-		List<String> list = new ArrayList<String>();
-		list.add(comp.getName());
-		if(comp.getIntroduced()!=null){
-			list.add(comp.getIntroduced().toString());
-		} else {
-			list.add(null);
-		} 
-		if(comp.getDiscontinued()!=null){
-			list.add(comp.getDiscontinued().toString());
-		} else {
-			list.add(null);
-		}
-		Integer id_comp;
-		if(comp.getCompany().getId()>0) {
-			id_comp = comp.getCompany().getId();
-		} else {
-			id_comp = (Integer) null;
-		}
-		Integer id;
-		if(comp.getId()>0) {
-			id = comp.getId();
-		} else {
-			id = (Integer) null;
-		}
-		this.jdbcTemplate.update(query, id_comp, id);
+		
+		Session session = sessionFactory.getCurrentSession();
+		session.merge(comp);
+		
 	}
 
-	public List<Computer> getAll() {
-		String query = "SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id";
-		return this.jdbcTemplate.query(query, new ComputerMapper() );
-	}
 
 	public List<Computer> getCriteria(String search, Sort sort, int offset, int scope) {
+		
+		Session session = sessionFactory.getCurrentSession();
 
 		if(sort == null){
 			sort = new Sort();
-			sort.setColumn(1);
+			sort.setColumn("name");
 			sort.setOrder("ASC");
 		}
-		StringBuilder query = new StringBuilder(80);
-		query.append("SELECT * FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id");
-		List<Computer> liste;
+		StringBuilder request = new StringBuilder(80);
+		request.append("from Computer as computer left outer join fetch computer.company as company ");
+		List<Computer> list = new ArrayList<>();
+		Query query;
 		if(search != null && !("".equals(search))) {
-			query.append(" WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ").append(sort.toString()).append(" LIMIT ?,?");
-			liste = jdbcTemplate.query(query.toString(), new ComputerMapper(),"%"+search+"%","%"+search+"%", offset, scope);
+			request.append(" WHERE computer.name LIKE ? OR company.name LIKE ? ").append(sort.toString());
+			query = session.createQuery(request.toString()).setParameter(0, "%"+search+"%").setParameter(1, "%"+search+"%");
+			query.setFirstResult(offset).setMaxResults(scope);
 		}
 		else{
-			query.append(" ORDER BY ").append(sort.toString()).append(" LIMIT ?,?");
-			liste = jdbcTemplate.query(query.toString(), new ComputerMapper(), offset, scope);
-		}
-		return liste;
-
+			request.append(sort.toString());
+			query = session.createQuery(request.toString());
+		}	
+		list = (List<Computer>)query.setFirstResult(offset).setMaxResults(scope).list();
+		return list;
+		
 	}
 
 	public int getNumberWithCriteria(String search) {
 
 		int resultInt = 0;
-		StringBuilder query = new StringBuilder(80);
-		query.append("SELECT COUNT(*) FROM computer LEFT OUTER JOIN company ON computer.company_id = company.id");
+		StringBuilder request = new StringBuilder(80);
+		Session session = sessionFactory.getCurrentSession();
+		Query query;
+		request.append("SELECT COUNT(*) FROM Computer as computer LEFT OUTER JOIN computer.company as company");
 		if(search != null && !("".equals(search))) {
-			query.append(" WHERE computer.name LIKE ? OR company.name LIKE ?");
-			resultInt = this.jdbcTemplate.queryForObject(query.toString(), Integer.class, "%"+search+"%", "%"+search+"%");
+			request.append(" WHERE computer.name LIKE ? OR company.name LIKE ?");
+			query = session.createQuery(request.toString()).setParameter(0, "%"+search+"%").setParameter(1, "%"+search+"%");			
 		}
 		else{
-			resultInt = this.jdbcTemplate.queryForObject(query.toString(), Integer.class);
+			query = session.createQuery(request.toString());
+			
 		}
+		resultInt = ((Long) query.list().get(0)).intValue();
 		return resultInt;
 	}
 
-	private static final class ComputerMapper implements RowMapper<Computer> {
-
-		public Computer mapRow(ResultSet results, int rowNum) throws SQLException {
-			Computer cp = new Computer();
-
-			cp.setId(new Integer(results.getInt(1)));
-			cp.setName(results.getString(2));
-			if(results.getString(3) != null) {
-				cp.setIntroduced(new DateTime(results.getString(3).substring(0,10)));
-			}
-			if(results.getString(4) != null) {
-				cp.setDiscontinued(new DateTime(results.getString(4).substring(0,10)));
-			}
-
-			Company comp = new Company();
-
-			comp.setId(results.getInt(5));
-			comp.setName(results.getString(7));
-			cp.setCompany(comp);
-
-			return cp;
-		}
-	}
 
 }
-
 
 

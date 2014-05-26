@@ -1,18 +1,26 @@
 package com.excilys.formation.java.projet.modele;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 
+@Entity
+@Table(name="log") 
 public class Log {
 
+	@Id
+	@GeneratedValue
 	private int id;
 	private String name;
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime date;
 	
 	public Log() {
-		this.id = 0;
-		this.name = "";
-		this.date = null;
 	}
 	
 	public Log(int id) {
