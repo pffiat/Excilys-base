@@ -29,6 +29,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
@@ -37,7 +38,7 @@
 			<id>excilys</id>
 			<url>http://repository.excilys.com/content/repositories/thirdparty/</url>
 		</repository>
-		
+
 	</repositories>
 
 	<!-- All the different version of the dependencies -->
@@ -57,6 +58,7 @@
 		<excilysVersion>2.2.0-RELEASE</excilysVersion>
 		<javaxPersistenceVerison>1.0.2</javaxPersistenceVerison>
 		<hibernateAnnotationVersion>3.5.6-Final</hibernateAnnotationVersion>
+		<QueryDslVersion>3.3.4</QueryDslVersion>
 		<hibVersion>4.3.5.Final</hibVersion>
 	</properties>
 
@@ -74,12 +76,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-		
-		 <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>jcl-over-slf4j</artifactId>
-        <version>1.7.7</version>
-    </dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.7</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -215,6 +217,19 @@
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.core</artifactId>
 				<version>3.2.0.GA</version>
+			</dependency>
+
+			<!-- QueryDSL : persistence -->
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>${QueryDslVersion}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>${QueryDslVersion}</version>
 			</dependency>
 
 		</dependencies>

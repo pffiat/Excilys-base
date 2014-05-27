@@ -9,6 +9,7 @@ import javax.persistence.criteria.Root;
 import com.excilys.formation.java.projet.common.Sort;
 import com.excilys.formation.java.projet.modele.*;
 import com.excilys.formation.java.projet.dao.*;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -49,9 +50,11 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 
 	public List<Computer> getCriteria(String search, Sort sort, int offset, int scope) {
-		
+
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(Computer.class);
+		HibernateQuery query = new HibernateQuery (session);  
+		QComputer computer = QComputer.computer;
+		query.from(computer);
 		if(sort == null){
 			sort = new Sort();
 			sort.setColumn("name");
@@ -59,19 +62,16 @@ public class ComputerDAOImpl implements ComputerDAO{
 		}
 		
 		if(sort.getOrder().equals("ASC")) {
-			criteria.addOrder(Order.asc(sort.getColumn()));
+		    query.orderBy(computer.introduced.asc());
 		} else {
-			criteria.addOrder(Order.desc(sort.getColumn()));
+		    query.orderBy(computer.introduced.desc());
 		}
-		
-		criteria.setMaxResults(scope).setFirstResult(offset);
 		
 		if(search != null && !("".equals(search))) {
-			criteria.add( Restrictions.like("name", "%"+search+"%"));
-			criteria.add( Restrictions.like("company.name", "%"+search+"%"));
+		    query.where(computer.name.like("%"+search+"%"), computer.company.name.like("%"+search+"%"));
 		}
-		List<Computer> list = new ArrayList<>();
-		list = criteria.list();
+		query.offset(offset).limit(scope);
+		List<Computer> list = query.list(computer);  
 		return list;
 		
 	}
@@ -80,13 +80,15 @@ public class ComputerDAOImpl implements ComputerDAO{
 
 		int resultInt;
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(Computer.class);
+		HibernateQuery query = new HibernateQuery (session);  
+		QComputer computer = QComputer.computer;
+		query.from(computer);
+		
 		if(search != null && !("".equals(search))) {
-			criteria.add( Restrictions.like("name", "%"+search+"%"));
-			criteria.add( Restrictions.like("company.name", "%"+search+"%"));			
+		    query.where(computer.name.like("%"+search+"%"), computer.company.name.like("%"+search+"%"));
 		}
 		
-		resultInt = ((Long)criteria.setProjection( Projections.rowCount() ).uniqueResult()).intValue();
+		resultInt = ((Long)query.count()).intValue();
 		return resultInt;
 	}
 
