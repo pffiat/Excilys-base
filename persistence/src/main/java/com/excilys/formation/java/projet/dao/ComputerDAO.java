@@ -13,8 +13,6 @@ public interface ComputerDAO {
 
 	public void update(Computer comp);
 
-	public List<Computer> getAll();
-
 	public List<Computer> getCriteria(String search, Sort sort, int offset, int scope);
 
 	public int getNumberWithCriteria(String search);

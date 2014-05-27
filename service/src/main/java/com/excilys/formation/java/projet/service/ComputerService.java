@@ -41,13 +41,6 @@ public class ComputerService {
 		return "ComputerService toString";
 	}
 
-	public List<Computer> getAll() {
-		List<Computer> comp = null;
-		comp = cptdao.getAll();
-		this.logdao.insert(new Log("get all computers"));
-		return comp;
-	}
-
 	public List<Computer> getCriteria(String criteria, Sort sort, int i, int pageLimit) {
 		List<Computer> comp = null;
 		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
