@@ -21,8 +21,8 @@ public class CompanyService {
 	@Transactional
 	public List<Company> getAll() {
 		List<Company> comp = null;
-		comp = cptdao.getAll();
-		this.logdao.insert(new Log("get all companies"));
+		comp = (List<Company>) cptdao.findAll();
+		this.logdao.save(new Log("get all companies"));
 		return comp;
 	}
 

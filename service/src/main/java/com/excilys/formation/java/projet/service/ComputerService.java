@@ -3,6 +3,8 @@ package com.excilys.formation.java.projet.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +24,18 @@ public class ComputerService {
 
 
 	public void insertComputer(Computer comp) {
-		this.cptdao.insert(comp);
-		this.logdao.insert(new Log("insert computer with id=" + comp.getId()));
+		this.cptdao.save(comp);
+		this.logdao.save(new Log("insert computer with id=" + comp.getId()));
 	}
 
 	public void updateComputer(Computer comp) {
-		this.cptdao.update(comp);
-		this.logdao.insert(new Log("update computer with id=" + comp.getId()));
+		this.cptdao.save(comp);
+		this.logdao.save(new Log("update computer with id=" + comp.getId()));
 	}
 
 	public void deleteComputer(Computer comp) {
 		this.cptdao.delete(comp);
-		this.logdao.insert(new Log("delete computer with id=" + comp.getId()));
+		this.logdao.save(new Log("delete computer with id=" + comp.getId()));
 
 	}
 
@@ -43,15 +45,24 @@ public class ComputerService {
 
 	public List<Computer> getCriteria(String criteria, Sort sort, int i, int pageLimit) {
 		List<Computer> comp = null;
-		comp = cptdao.getCriteria(criteria, sort, i, pageLimit);
-		logdao.insert(new Log("get computers with criteria:" + criteria));
+		Pageable pageable = new PageRequest(i , pageLimit);
+		if( criteria == null || "".equals(criteria)){
+			comp = (List<Computer>) cptdao.findByNameContaining("", pageable);
+		} else {
+			comp = cptdao.findByNameContaining(criteria, pageable);
+		}
+		logdao.save(new Log("get computers with criteria:" + criteria));
 		return comp;
 	}
 
 	public int getNumberWithCriteria(String criteria) {
-		int count = 0;
-		count = cptdao.getNumberWithCriteria(criteria);
-		logdao.insert(new Log("select count with criteria:" + criteria));		
+		int count;
+		if( criteria == null || "".equals(criteria)){
+			count =  ((Long)cptdao.count()).intValue();
+		} else {
+			count = cptdao.countByNameContaining(criteria);
+		}
+		logdao.save(new Log("select count with criteria:" + criteria));		
 		return count;
 	}
 }

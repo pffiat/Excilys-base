@@ -52,6 +52,12 @@
 			<artifactId>spring-orm</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springDataVersion}</version>
+		</dependency>
+
 		<!-- QueryDSL : persistence -->
 		<dependency>
 			<groupId>com.mysema.querydsl</groupId>
