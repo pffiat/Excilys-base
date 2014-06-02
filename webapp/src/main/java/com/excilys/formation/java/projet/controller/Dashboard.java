@@ -38,10 +38,10 @@ public class Dashboard {
 		pageWrapper.setTotalCount(cs.getNumberWithCriteria(search));
 
 		List<ComputerDto> comp = null;
-		comp = ComputerMapper.toDTOList(cs.getCriteria(
-				search,
+		comp = ComputerMapper.toDTOList(cs.getCriteria(search,
 				pageWrapper.getSort(),
-				pageWrapper.getCurrentPage() * pageWrapper.getPageLimit() - pageWrapper.getPageLimit(),
+				pageWrapper.getCurrentPage() * pageWrapper.getPageLimit()
+						- pageWrapper.getPageLimit(),
 				pageWrapper.getPageLimit()));
 		pageWrapper.setList(comp);
 		pageWrapper.setAttribute();

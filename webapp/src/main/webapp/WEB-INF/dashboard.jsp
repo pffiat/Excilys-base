@@ -1,10 +1,12 @@
 <jsp:include page="/include/header.jsp" />    
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%-- 
-<%@ taglib tagdir="/WEB-INF/tag" prefix="tags" %>  --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <section id="main">
 	<h1 id="homeTitle">${pageWrapper.totalCount} 
     <spring:message code="computers.found" text="" />   ${pageWrapper.nbOfLines} <spring:message code="displayed" text="" /> </h1>
+   
+    
 	<div id="actions" class="row">
 		<form action="" method="GET">
 
@@ -33,7 +35,7 @@
 			
 			<c:forEach begin="1" end="4" var="i">
 			<div class="col-md-1">
-			<a class="btn btn-info" href="?lignes=${i}" id=${i} >${i*5}</a>
+			<a class="btn btn-info" href="?lignes=${i}" id="${i}" >${i*5}</a>
 			</div>
 			</c:forEach>
 			
@@ -80,7 +82,7 @@
 		<div id="pages">	<%-- 
 		<tags:pagination /> --%>
 			<c:forEach begin="1" end="${pageWrapper.nbOfBouton}" var="i">
-					<a class="btn btn-success" id=${i} href="?page=${i}">${i}</a>
+					<a class="btn btn-success" id="${i}" href="?page=${i}">${i}</a>
 			</c:forEach>
 		</div>
 </section>

@@ -40,7 +40,7 @@ public class EditComputer {
 		List<Company> liste = cs.getAll();
 		String id = request.getParameter("id");
 		if(id != null) {
-			Integer.parseInt(id);
+			cpt.setId(Integer.parseInt(id));
 		}
 		cpt.setName(request.getParameter("name"));	
 		cpt.setIntroduced(request.getParameter("introduced"));

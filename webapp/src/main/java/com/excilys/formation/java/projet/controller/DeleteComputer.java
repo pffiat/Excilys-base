@@ -17,18 +17,19 @@ import com.excilys.formation.java.projet.service.ComputerService;
 @RequestMapping("/DeleteComputer")
 public class DeleteComputer {
 
-@Autowired
-private ComputerService cs;
+	@Autowired
+	private ComputerService cs;
 
-@RequestMapping(method = RequestMethod.GET)
-protected ModelAndView doGet(HttpServletRequest request) throws ServletException, IOException {
-String id = request.getParameter("id");
-ModelAndView mav = new ModelAndView("redirect:Dashboard");
-if(id != null) {
-int idInt = Integer.parseInt(id);
-Computer cpt = new Computer(idInt);
-cs.deleteComputer(cpt);
-}
-return mav;
-}
+	@RequestMapping(method = RequestMethod.GET)
+	protected ModelAndView doGet(HttpServletRequest request)
+			throws ServletException, IOException {
+		String id = request.getParameter("id");
+		ModelAndView mav = new ModelAndView("redirect:Dashboard");
+		if (id != null) {
+			int idInt = Integer.parseInt(id);
+			Computer cpt = new Computer(idInt);
+			cs.deleteComputer(cpt);
+		}
+		return mav;
+	}
 }

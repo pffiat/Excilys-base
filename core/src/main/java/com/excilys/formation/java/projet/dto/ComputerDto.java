@@ -1,8 +1,5 @@
 package com.excilys.formation.java.projet.dto;
 
-
-
-
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
